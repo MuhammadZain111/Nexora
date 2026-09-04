@@ -60,4 +60,3 @@ export const searchUsersByNameOrEmail = async (
 
   return users;
 };
-W

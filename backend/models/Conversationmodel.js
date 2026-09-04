@@ -27,6 +27,6 @@ const conversationSchema = new mongoose.Schema(
 // Speeds up lookups like: Conversation.findOne({ participants: { $all: [senderId, receiverId] } })
 conversationSchema.index({ participants: 1 });
 
-const Conversatio = mongoose.model("Conversation", conversationSchema);
+const Conversation = mongoose.model("Conversation", conversationSchema);
 
 export default Conversation;
