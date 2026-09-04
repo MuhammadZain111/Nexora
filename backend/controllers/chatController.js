@@ -2,6 +2,8 @@ import Message from "../models/Messagemodel.js";
 import Conversation from "../models/conversationmodel.js";
 
 // GET /api/messages/:conversationId
+
+
 export const getMessages = async (req, res) => {
   try {
     const { conversationId } = req.params;
@@ -170,5 +172,77 @@ export const deleteConversation = async (req, res) => {
       error: error.message,
     });
   }
+}
+
+
+export const getConversationById = async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+
+    // Your database logic here
+
+    res.status(200).json({
+      message: "Conversation fetched successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching conversation:", error);
+
+    res.status(500).json({
+      message: "Failed to fetch conversation",
+      error: error.message,
+    });
+  }
 };
-```
+
+
+
+export const getConversations = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const result = await db.query(
+      `
+      SELECT
+        c.id AS conversation_id,
+        c.created_at,
+
+        u.id AS user_id,
+        u.name,
+        u.email,
+        u.profile_image,
+        u.is_online
+
+      FROM conversations c
+
+      INNER JOIN conversation_participants cp
+        ON c.id = cp.conversation_id
+
+      INNER JOIN conversation_participants cp2
+        ON c.id = cp2.conversation_id
+
+      INNER JOIN users u
+        ON u.id = cp2.user_id
+
+      WHERE cp.user_id = $1
+        AND cp2.user_id != $1
+
+      ORDER BY c.created_at DESC
+      `,
+      [userId]
+    );
+
+    res.status(200).json({
+      success: true,
+      conversations: result.rows,
+    });
+
+  } catch (error) {
+    console.error("Get conversations error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch conversations",
+      error: error.message,
+    });
+  }
+};
