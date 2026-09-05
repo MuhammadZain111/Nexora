@@ -15,16 +15,13 @@ return (
   
   
   
-
+<BrowserRouter>
  <AuthProvider>
-    <BrowserRouter>
+    
        <Routes>
         <Route path="/" element={<NexoraLandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignUpPage />} />
-         <Route path="/chatui" element={<ChatAppUI />} />
-        
-
         <Route
           path="/chatui"
           element={
@@ -34,8 +31,9 @@ return (
           }
         />
       </Routes>
-    </BrowserRouter>
+   
    </AuthProvider>
+    </BrowserRouter>
 
 )}
   
