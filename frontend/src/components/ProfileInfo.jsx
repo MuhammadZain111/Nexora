@@ -1,48 +1,55 @@
-"use client";
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { User, Settings, CircleHelp, LogOut } from "lucide-react";
-
-
+import { useNavigate } from "react-router-dom";
+import { Settings, CircleHelp, LogOut } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProfileInfo() {
-  
+  const { user, isCheckingAuth, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await fetch("/api/get-user");
-      const data = await res.json();
-
-      if (data.success) {
-        setUser(data.user);
-      }
-    };
-    fetchUser();
-  }, []);
+  if (isCheckingAuth) return <p>Loading...</p>;
+  if (!user) return <p>Failed to load user. Please log in.</p>;
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="mt-8 w-full max-w-xl rounded-[32px] border border-gray-200 bg-white shadow-sm p-8">
-        <button className="w-10 h-10 rounded-full bg-[#352C4D] hover:bg-[#4B3B6B] flex items-center justify-center text-white transition">
-          <Image
-            src={user?.profileImage || session.user.image || "/icons/user.png"}
-            width={50}
-            height={50}
-            alt="Profile Image"
-            className="rounded-full"
+        {/* User info */}
+        <div className="flex items-center gap-4 mb-6">
+          <img
+            src="https://i.pravatar.cc/100"
+            alt="profile"
+            className="w-12 h-12 rounded-full"
           />
-        </button>
+          <div>
+            <h2 className="text-slate-800 font-semibold">{user.name}</h2>
+            <p className="text-slate-500 text-sm">{user.email}</p>
+          </div>
+        </div>
 
-          <>
-            <button
-              className="flex items-center gap-5 text-slate-700 hover:text-red-500 transition"
-              onClick={() => signOut({ callbackUrl: "/sign-in" })}
-            ></button>
-          </>
-    
+        {/* Actions */}
+        <div className="flex flex-col gap-3">
+          <button className="flex items-center gap-3 text-slate-700 hover:text-[#352C4D] transition cursor-pointer">
+            <Settings size={18} />
+            <span>Settings</span>
+          </button>
 
+          <button className="flex items-center gap-3 text-slate-700 hover:text-[#352C4D] transition cursor-pointer">
+            <CircleHelp size={18} />
+            <span>Help</span>
+          </button>
+
+          <button
+            className="flex items-center gap-3 text-slate-700 hover:text-red-500 transition cursor-pointer"
+            onClick={handleLogout}
+          >
+            <LogOut size={18} />
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
     </div>
   );

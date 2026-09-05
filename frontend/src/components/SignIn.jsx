@@ -3,7 +3,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import  axiosInstance  from "@/lib/axios";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/authSlice";
+import { useAuth } from "../context/AuthContext";
+
+// inside component
+
 
 /**
  * Sign in page — restyled to match Nexora's landing page tokens.
@@ -19,7 +22,7 @@ import { setUser } from "@/store/authSlice";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { setUser } = useAuth();
 
   const [form, setForm] = useState({
     identifier: "",
@@ -48,7 +51,7 @@ export default function SignIn() {
         password: form.password,
       });
 
-      dispatch(setUser(res.data));
+      setUser(res.data);
       navigate("/chatui");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");

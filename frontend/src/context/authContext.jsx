@@ -25,10 +25,24 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+
+
+ const logout = async () => {
+    try {
+      await axiosInstance.post("/api/auth/logout");
+    } finally {
+      setUser(null);
+    }
+  };
+
+
+
+
   const value = {
     user,
     setUser,
     isCheckingAuth,
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

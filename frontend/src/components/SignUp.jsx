@@ -3,8 +3,10 @@ import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import  axiosInstance  from "@/lib/axios";
-import { setUser } from "@/store/authSlice";
 import ValidationItem from "./ValidationItem";
+
+
+
 
 
 export default function SignUp() {

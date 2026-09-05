@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedChat } from "../store/chatSlice";
+import ProfileInfo from "./ProfileInfo";
 
 import {
   Dialog,
@@ -11,6 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 
 const AVATAR_COLORS = [
   "bg-blue-100 text-blue-800",
@@ -392,7 +394,11 @@ function SidebarChats() {
 
         {/* Profile */}
     
-          <div className="border-t border-gray-200 p-5 flex items-center justify-between">
+
+    <ProfileInfo />
+
+
+          {/* <div className="border-t border-gray-200 p-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img
                 src="https://i.pravatar.cc/100"
@@ -418,7 +424,7 @@ function SidebarChats() {
             >
               ⏻
             </button>
-          </div>
+          </div> */}
     
       </aside>
    
