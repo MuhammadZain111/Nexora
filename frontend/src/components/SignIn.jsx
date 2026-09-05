@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import  axiosInstance  from "@/lib/axios";
 import { useDispatch } from "react-redux";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 
 // inside component
 
@@ -21,6 +21,7 @@ import { useAuth } from "../context/AuthContext";
  */
 
 export default function SignIn() {
+  
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
