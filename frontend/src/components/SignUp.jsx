@@ -50,18 +50,69 @@ export default function SignUp() {
     setErrors({ email: "", form: "" });
     setLoading(true);
 
-    try {
-      const res = await axiosInstance.post("/api/auth/signup", form);
-      dispatch(setUser(res.data));
-      navigate("/login");
-    } catch (err) {
+   try {
+  setLoading(true);
+   console.log("Base URL:", axiosInstance.defaults.baseURL);
+    console.log("Signup endpoint:", "/api/auth/signup");
+
+  const res = await axiosInstance.post("/api/auth/signup", form);
+
+  // Signup successful
+  dispatch(setUser(res.data));
+
+  navigate("/login");
+
+} catch (err) {
+  console.error("Signup error:", err);
+
+  if (err.response) {
+    const status = err.response.status;
+    const message =
+      err.response.data?.message ||
+      "Unable to create your account.";
+
+    if (status === 400) {
+      setErrors({
+        email: err.response.data?.field === "email" ? message : "",
+        form: err.response.data?.field === "email" ? "" : message,
+      });
+
+    } else if (status === 409) {
+      setErrors({
+        email: message,
+        form: "",
+      });
+
+    } else if (status >= 500) {
       setErrors({
         email: "",
-        form: err.response?.data?.message || "Something went wrong. Please try again.",
+        form: "Server error. Please try again later.",
       });
-    } finally {
-      setLoading(false);
+
+    } else {
+      setErrors({
+        email: "",
+        form: message,
+      });
     }
+
+  } else if (err.request) {
+    setErrors({
+      email: "",
+      form: "Unable to connect to the server. Please check your connection.",
+    });
+
+  } else {
+    setErrors({
+      email: "",
+      form: "Something went wrong. Please try again.",
+    });
+  }
+
+} finally {
+  setLoading(false);
+}
+
   };
 
   return (

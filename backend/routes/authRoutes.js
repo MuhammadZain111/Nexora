@@ -4,14 +4,18 @@ import {
   login,
   logOut,
   checkAuth,
+  getUser,
 } from "../controllers/authController.js";
 import {protectRoute} from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
-router.post("/api/auth/signup", signup);
-router.post("/api/auth/login", login);
-router.post("/api/auth/logout", logOut);
+router.post("/signup", signup);
+router.post("/login", login);
+router.post("/logout", logOut);
+router.get('/user', authenticate, getUser);
+
+
 router.get("/check", protectRoute, checkAuth);
 
 export default router;

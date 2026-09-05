@@ -1,13 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
-
 import { User, Settings, CircleHelp, LogOut } from "lucide-react";
 
+
+
 export default function ProfileInfo() {
-  const { data: session, status } = useSession();
+  
 
   const [user, setUser] = useState(null);
 
@@ -20,7 +19,6 @@ export default function ProfileInfo() {
         setUser(data.user);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -37,14 +35,14 @@ export default function ProfileInfo() {
           />
         </button>
 
-        {session && (
           <>
             <button
               className="flex items-center gap-5 text-slate-700 hover:text-red-500 transition"
               onClick={() => signOut({ callbackUrl: "/sign-in" })}
             ></button>
           </>
-        )}
+    
+
       </div>
     </div>
   );

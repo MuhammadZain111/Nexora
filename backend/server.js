@@ -10,16 +10,11 @@ import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
-
-
-
 dotenv.config();
 
 const app = express();
 
-/* ========================= Express Middleware========================= */
-
-
+/* ================== Express Middleware ===================== */
 
 app.use(express.json());
 app.use(cookieParser());
@@ -31,9 +26,7 @@ app.use(
   }),
 );
 
-/* =========================
-   Routes
-========================= */
+/* =====================  Routes   ======================= */
 
 app.use("/api/auth", authRoutes);
 
@@ -41,11 +34,10 @@ app.use("/api/chat", chatRoutes);
 
 app.use("/api/users", userRoutes);
 
-/* =========================
-   Error Handling Middleware
-========================= */
+/* ===============Error Handling Middleware ===================== */
 
 /*  HTTP Server- */
+
 
 const httpServer = http.createServer(app);
 
@@ -86,9 +78,7 @@ io.on("connection", (socket) => {
 
   io.emit("online_users", getOnlineUserIds());
 
-  /* =========================
-     Send Message
-  =========== */
+  /* ========================= Send Message  ===========  */
 
   socket.on("send_message", async (payload) => {
     try {
@@ -138,9 +128,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  /* =========================
-     Disconnect
-  ========================= */
+  /* ========================= Disconnect ======================= */
 
   socket.on("disconnect", () => {
     console.log(`❌ User ${userId} disconnected`);
@@ -151,9 +139,7 @@ io.on("connection", (socket) => {
   });
 });
 
-/* =========================
-   Start Server
-========================= */
+/* ====================  Start Server   ======================= */
 
 const PORT = process.env.PORT || 5000;
 
