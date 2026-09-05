@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedChat } from "../store/chatSlice";
-import ProfileInfo from "./ProfileInfo";
+
 
 import {
   Dialog,
@@ -388,43 +388,17 @@ function SidebarChats() {
                 <span className="text-xl">#</span>
                 <p className="font-medium">Development</p>
               </div>
+
             </div>
+
+      
+      
+        <ProfileInfo />
+
           </div>
         </div>
-
-        {/* Profile */}
-    
-
-    <ProfileInfo />
-
-
-          {/* <div className="border-t border-gray-200 p-5 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img
-                src="https://i.pravatar.cc/100"
-                alt="profile"
-                className="w-12 h-12 rounded-full"
-              />
-
-              <div>
-                <h2 className="text-xl font-semibold text-slate-700">
-                
-                  
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                
-
-                </p>
-              </div>
-            </div>
-
-            <button
-              className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center"
-              onClick=""
-            >
-              ⏻
-            </button>
-          </div> */}
+   {/* Profile */}
+        
     
       </aside>
    

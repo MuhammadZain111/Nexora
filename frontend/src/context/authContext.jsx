@@ -6,13 +6,14 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
  
   const [user, setUser] = useState(null);
+ 
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   // Check whether user is already logged in
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axiosInstance.get("/auth/check");
+        const res = await axiosInstance.get("/api/auth/check");
 
         setUser(res.data);
       } catch (error) {

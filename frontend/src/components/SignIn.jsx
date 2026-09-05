@@ -1,9 +1,8 @@
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import axiosInstance from "@/lib/axios";
+import { Eye, EyeOff, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import  axiosInstance  from "@/lib/axios";
-import { useDispatch } from "react-redux";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthContext";
 
 // inside component
 
