@@ -1,5 +1,5 @@
-import { searchUsersService } from "../services/userService.js";
 import User from "../models/UserModel.js";
+import { searchUsersService } from "../services/userService.js";
 
 export const getUsersForSidebar = async (req, res, next) => {
   try {

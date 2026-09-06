@@ -1,15 +1,15 @@
 "use client";
-import SidebarChats from "../components/SidebarChats";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import ChatHeader from "../components/ChatHeader";
+import EmptyChatContainer from "../components/EmptyChatContainer";
 import MessageComponent from "../components/MessageComponent";
 import MessageInput from "../components/MessageInput";
-import EmptyChatContainer from "../components/EmptyChatContainer";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from 'react';
-import { socket } from "../lib/socket";
-import axiosInstance from "../lib/axios";
-import { addMessage, setConnected, setMessages, updateMessageStatus } from "../store/chatSlice";
+import SidebarChats from "../components/SidebarChats";
 import { useAuth } from "../context/AuthContext";
+import axiosInstance from "../lib/axios";
+import { socket } from "../lib/socket";
+import { addMessage, setConnected, setMessages, updateMessageStatus } from "../store/chatSlice";
 
 
 export default function ChatAppUI() {
@@ -34,7 +34,7 @@ export default function ChatAppUI() {
 
   socket.on("message_ack", ({ tempId, savedMessage }) => {
     dispatch(updateMessageStatus({
-      conversationId: savedMessage.receiverId,
+      conversationId: String(savedMessage.receiverId),
       tempId,
       status: "sent",
       realId: savedMessage._id,
@@ -42,7 +42,16 @@ export default function ChatAppUI() {
   });
 
   socket.on("receive_message", (message) => {
-    dispatch(addMessage({ ...message, conversationId: message.senderId }));
+    dispatch(
+      addMessage({
+        ...message,
+        conversationId: String(message.senderId),
+      }),
+    );
+  });
+
+  socket.on("message_error", ({ tempId, error }) => {
+    console.error("Message delivery failed:", error, tempId);
   });
 
   socket.on("connect_error", (err) => {
@@ -77,6 +86,9 @@ export default function ChatAppUI() {
     dispatch(setConnected(false));
     socket.off("connect");
     socket.off("connect_error");
+    socket.off("message_ack");
+    socket.off("receive_message");
+    socket.off("message_error");
     socket.off("disconnect");
     socket.off("reconnect_attempt");
     socket.off("reconnect_failed");

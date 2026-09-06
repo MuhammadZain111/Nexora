@@ -1,9 +1,9 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
-import EmojiPicker from "emoji-picker-react";
-import { useDispatch } from "react-redux";
 import { socket } from "@/lib/socket";
 import { addMessage } from "@/store/chatSlice";
+import EmojiPicker from "emoji-picker-react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 
 function MessageInput({ currentUserId, receiverId }) {
   const dispatch = useDispatch();

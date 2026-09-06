@@ -1,16 +1,16 @@
-import express from "express";
-import http from "http";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { Server } from "socket.io";
 import dotenv from "dotenv";
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 import connectDB from "./config/db.js";
+import Conversation from "./models/conversationmodel.js";
 import Message from "./models/Messagemodel.js";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
-import Conversation from "./models/Conversationmodel.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -65,7 +65,7 @@ function getOnlineUserIds() {
 /* --Socket Connection ---  */
 
 io.on("connection", (socket) => {
-  const userId = socket.handshake.query.userId;
+  const userId = String(socket.handshake.query.userId || "");
 
   if (!userId) {
     console.log("⚠️ No userId provided");
@@ -75,7 +75,9 @@ io.on("connection", (socket) => {
 
   socket.userId = userId;
 
-  userSocketMap.set(userId, socket.id);
+  const sockets = userSocketMap.get(userId) || new Set();
+  sockets.add(socket.id);
+  userSocketMap.set(userId, sockets);
 
   console.log(`✅ User ${userId} connected`);
 
@@ -86,26 +88,35 @@ io.on("connection", (socket) => {
   socket.on("send_message", async (payload) => {
     try {
       const { senderId, receiverId, text, tempId } = payload;
+      const normalizedSenderId = String(senderId || "");
+      const normalizedReceiverId = String(receiverId || "");
 
-      if (senderId !== userId || !receiverId || !text?.trim()) {
+      if (
+        normalizedSenderId !== userId ||
+        !normalizedReceiverId ||
+        !text?.trim()
+      ) {
         console.log("⚠️ Invalid message:", payload);
         socket.emit("message_error", { tempId, error: "Invalid message" });
         return;
       }
 
       let conversation = await Conversation.findOne({
-        participants: { $all: [senderId, receiverId], $size: 2 },
+        participants: {
+          $all: [normalizedSenderId, normalizedReceiverId],
+          $size: 2,
+        },
       });
 
       if (!conversation) {
         conversation = await Conversation.create({
-          participants: [senderId, receiverId],
+          participants: [normalizedSenderId, normalizedReceiverId],
         });
       }
 
       const savedMessage = await Message.create({
-        senderId,
-        receiverId,
+        senderId: normalizedSenderId,
+        receiverId: normalizedReceiverId,
         text,
         conversationId: conversation._id,
       });
@@ -116,8 +127,8 @@ io.on("connection", (socket) => {
 
       const messageToSend = {
         _id: savedMessage._id,
-        senderId,
-        receiverId,
+        senderId: normalizedSenderId,
+        receiverId: normalizedReceiverId,
         text,
         createdAt: savedMessage.createdAt,
         status: "sent",
@@ -125,9 +136,9 @@ io.on("connection", (socket) => {
 
       /* Send to receiver */
 
-      const recipientSocketId = userSocketMap.get(receiverId);
+      const recipientSocketIds = userSocketMap.get(normalizedReceiverId) || [];
 
-      if (recipientSocketId) {
+      for (const recipientSocketId of recipientSocketIds) {
         io.to(recipientSocketId).emit("receive_message", messageToSend);
       }
 
@@ -152,7 +163,11 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`❌ User ${userId} disconnected`);
 
-    userSocketMap.delete(userId);
+    const sockets = userSocketMap.get(userId);
+    if (sockets) {
+      sockets.delete(socket.id);
+      if (sockets.size === 0) userSocketMap.delete(userId);
+    }
 
     io.emit("online_users", getOnlineUserIds());
   });

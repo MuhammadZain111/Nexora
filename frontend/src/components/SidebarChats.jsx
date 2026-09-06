@@ -8,10 +8,10 @@ import { ScrollArea } from "./ui/scroll-area";
 
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogTitle,
 } from "@/components/ui/dialog";
 
 

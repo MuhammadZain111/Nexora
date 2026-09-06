@@ -3,10 +3,16 @@ import { useSelector } from "react-redux";
 import { useAuth } from "../context/AuthContext";
 
 function MessageComponent() {
+
+
   const { user } = useAuth();
+
   const selectedChat = useSelector((state) => state.chat.selectedChatData);
+
   const selectedChatId = selectedChat?._id || selectedChat?.id;
+
   const messages = useSelector((state) => state.chat.messages[selectedChatId] || []);
+
   const currentUserId = user?._id || user?.id;
 
   return (
@@ -16,7 +22,9 @@ function MessageComponent() {
       )}
 
       {messages.map((message) => {
-        const isMine = String(message.senderId) === String(currentUserId);
+       
+       const isMine = String(message.senderId) === String(currentUserId);
+        
         const messageText = message.text || message.message;
 
         return (
