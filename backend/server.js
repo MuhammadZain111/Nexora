@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import connectDB from "./config/db.js";
 import Conversation from "./models/conversationmodel.js";
 import Message from "./models/Messagemodel.js";
+import User from "./models/UserModel.js";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
@@ -121,6 +122,10 @@ io.on("connection", (socket) => {
         conversationId: conversation._id,
       });
 
+      const sender = await User.findById(normalizedSenderId)
+        .select("name email profilePic")
+        .lean();
+
       conversation.messages.push(savedMessage._id);
       conversation.lastMessage = savedMessage._id;
       await conversation.save();
@@ -132,6 +137,14 @@ io.on("connection", (socket) => {
         text,
         createdAt: savedMessage.createdAt,
         status: "sent",
+        sender: sender
+          ? {
+              _id: sender._id,
+              name: sender.name,
+              email: sender.email,
+              profilePic: sender.profilePic,
+            }
+          : null,
       };
 
       /* Send to receiver */

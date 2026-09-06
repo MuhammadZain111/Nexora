@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import axiosInstance from "../lib/axios";
+import { socket } from "../lib/socket";
 import { setSelectedChat } from "../store/chatSlice";
 import ProfileInfo from "./ProfileInfo";
 import { ScrollArea } from "./ui/scroll-area";
@@ -52,6 +53,25 @@ function SidebarChats() {
     };
 
     loadContacts();
+  }, []);
+
+  useEffect(() => {
+    const handleIncomingMessage = (message) => {
+      const sender = message.sender;
+      if (!sender) return;
+
+      setContacts((currentContacts) => {
+        const senderId = String(sender._id || sender.id);
+        const withoutSender = currentContacts.filter(
+          (contact) => String(contact._id || contact.id) !== senderId,
+        );
+
+        return [sender, ...withoutSender];
+      });
+    };
+
+    socket.on("receive_message", handleIncomingMessage);
+    return () => socket.off("receive_message", handleIncomingMessage);
   }, []);
 
   const resetModal = () => {
