@@ -14,9 +14,16 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
 
-    message: {
+    text: {
       type: String,
       required: true,
+      trim: true,
+    },
+
+    // Kept optional so existing messages without a conversation can still be read.
+    conversationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Conversation",
     },
 
     delivered: {

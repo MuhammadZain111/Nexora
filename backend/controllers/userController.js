@@ -1,4 +1,17 @@
 import { searchUsersService } from "../services/userService.js";
+import User from "../models/UserModel.js";
+
+export const getUsersForSidebar = async (req, res, next) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.user._id } })
+      .select("name email profilePic")
+      .sort({ name: 1 });
+
+    res.status(200).json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const searchUsers = async (req, res, next) => {
   try {

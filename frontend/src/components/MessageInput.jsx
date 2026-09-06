@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { useDispatch } from "react-redux";
 import { socket } from "@/lib/socket";
@@ -67,19 +67,19 @@ function MessageInput({ currentUserId, receiverId }) {
   };
 
   return (
-    <div className="p-6 border-t border-gray-200 bg-white">
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 flex items-center bg-[#F5F5F5] border border-gray-200 rounded-2xl px-5 py-4">
+    <div className="shrink-0 p-3 sm:p-4 border-t border-gray-200 ">
+      <div className="flex items-center gap-2 sm:gap-4">
+        <div className="relative flex-1 flex items-center  border border-gray-200 rounded-2xl px-5 py-4">
           <input
             type="text"
             placeholder="Enter message"
-            className="flex-1 bg-transparent outline-none text-black"
+            className="flex-1 bg-transparent outline-none text-white"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
           />
 
-          <div className="flex items-center gap-4 text-2xl text-gray-600">
+          <div className="flex items-center gap-2 sm:gap-4 text-xl sm:text-2xl text-gray-600">
             <button type="button">📎</button>
             <button
               type="button"
@@ -105,7 +105,7 @@ function MessageInput({ currentUserId, receiverId }) {
 
         <button
           type="button"
-          className="w-16 h-16 rounded-2xl bg-black text-white text-2xl shadow-lg hover:scale-105 transition-all"
+          className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-black text-white text-xl sm:text-2xl shadow-lg hover:scale-105 transition-all"
           onClick={handleSendMessage}
         >
           ➤

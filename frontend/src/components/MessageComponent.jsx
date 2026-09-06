@@ -1,80 +1,52 @@
 "use client";
-import React from "react";
-import { useEffect } from "react";
-import { socket } from "@/lib/socket";
+import { useSelector } from "react-redux";
+import { useAuth } from "../context/AuthContext";
 
 function MessageComponent() {
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-    });
-
-    socket.on("connect_error", (error) => {
-      console.error("Socket connection failed:", error.message);
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("connect_error");
-    };
-  }, []);
+  const { user } = useAuth();
+  const selectedChat = useSelector((state) => state.chat.selectedChatData);
+  const selectedChatId = selectedChat?._id || selectedChat?.id;
+  const messages = useSelector((state) => state.chat.messages[selectedChatId] || []);
+  const currentUserId = user?._id || user?.id;
 
   return (
-    <div className="flex-1 overflow-y-auto px-10 py-8 space-y-8">
-      {/* Incoming Message */}
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-semibold">
-          A
-        </div>
+    <div className="min-h-full px-4 sm:px-10 py-8 space-y-4">
+      {messages.length === 0 && (
+        <p className="text-center text-gray-500">No messages yet. Say hello.</p>
+      )}
 
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <p className="font-semibold">Ali Khan</p>
-            <span className="text-sm text-gray-500">11:45 AM</span>
-          </div>
+      {messages.map((message) => {
+        const isMine = String(message.senderId) === String(currentUserId);
+        const messageText = message.text || message.message;
 
-          <div className="bg-white border border-gray-200 rounded-2xl p-4 max-w-[500px] shadow-sm">
-            <p className="text-gray-700">
-              Hello everyone 👋 Welcome to the new chat application.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Outgoing Message */}
-      <div className="flex justify-end">
-        <div>
-          <div className="bg-black text-white rounded-2xl p-5 max-w-[400px] shadow-lg">
-            <p>The UI design is completed successfully. Please review it.</p>
-          </div>
-
-          <p className="text-sm text-gray-500 mt-2 text-right">11:47 AM</p>
-        </div>
-      </div>
-
-      {/* File Message */}
-      <div className="flex justify-end">
-        <div>
-          <div className="bg-white border border-gray-200 rounded-2xl p-5 w-[360px] shadow-sm flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-black text-white flex items-center justify-center text-xl">
-                📄
+        return (
+          <div
+            key={message._id || message.tempId}
+            className={isMine ? "flex justify-end" : "flex justify-start"}
+          >
+            <div className="max-w-[75%]">
+              <div
+                className={
+                  isMine
+                    ? "bg-black text-white rounded-2xl px-4 py-3"
+                    : "bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm"
+                }
+              >
+                <p>{messageText}</p>
               </div>
-
-              <div>
-                <p className="font-medium text-sm">project-design.zip</p>
-                <p className="text-xs text-gray-500">2.5 MB</p>
-              </div>
+              <p className="text-xs text-gray-500 mt-1 px-1">
+                {message.createdAt
+                  ? new Date(message.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : ""}
+                {message.status === "pending" ? " · Sending" : ""}
+              </p>
             </div>
-
-            <button className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center">
-              ↓
-            </button>
           </div>
-
-          <p className="text-sm text-gray-500 mt-2 text-right">11:50 AM</p>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 }

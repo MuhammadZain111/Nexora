@@ -1,14 +1,10 @@
 import express from "express";
-import { getUsersForSidebar, searchUsers } from "../controllers/userController.js";
+import { getMessages } from "../controllers/messageController.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
 router.use(protectRoute);
-
-router.get("/contacts", getUsersForSidebar);
-
-router.post("/search-contact", searchUsers);
-
+router.get("/:id", getMessages);
 
 export default router;

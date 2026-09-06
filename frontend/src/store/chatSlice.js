@@ -8,7 +8,6 @@ const initialState = {
   isConnected: false,
   selectedChatData: null,
   chats: [],
-  messages: [],
   isLoading: false,
 };
 
@@ -24,16 +23,16 @@ const chatSlice = createSlice({
       state.selectedChatData = action.payload;
     },
 
+    setSelectedChat(state, action) {
+      state.selectedChatData = action.payload;
+    },
+
     closeChat(state) {
       state.selectedChatData = null;
     },
 
     setChats: (state, action) => {
       state.chats = action.payload;
-    },
-
-    setMessages: (state, action) => {
-      state.messages = action.payload;
     },
 
     setOnlineUsers(state, action) {
@@ -53,7 +52,6 @@ const chatSlice = createSlice({
       state.conversations = action.payload;
     },
 
-    // Load full message history for a conversation (e.g. after fetching from DB)
     setMessages(state, action) {
       const { conversationId, messages } = action.payload;
       state.messages[conversationId] = messages;

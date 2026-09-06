@@ -3,9 +3,9 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!fullName || !email || !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
     if (password.length < 6) {
@@ -19,14 +19,14 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Email already in use." });
     }
 
-    const newUser = new User({ fullName, email, password });
+    const newUser = new User({ name, email, password });
     await newUser.save();
 
     generateTokenAndSetCookie(newUser._id, res);
 
     res.status(201).json({
       _id: newUser._id,
-      fullName: newUser.fullName,
+      name: newUser.name,
       email: newUser.email,
       profilePic: newUser.profilePic,
     });

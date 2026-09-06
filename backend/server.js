@@ -9,6 +9,8 @@ import Message from "./models/Messagemodel.js";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
+import Conversation from "./models/Conversationmodel.js";
 
 dotenv.config();
 
@@ -26,15 +28,16 @@ app.use(
   }),
 );
 
-/* =====================  Routes   ======================= */
+/* =====================  Routes  ====================*/
 
 app.use("/api/auth", authRoutes);
 
 app.use("/api/chat", chatRoutes);
 
 app.use("/api/users", userRoutes);
+app.use("/api/messages", messageRoutes);
 
-/* ===============Error Handling Middleware ===================== */
+/* ==========Error Handling Middleware ============== */
 
 /*  HTTP Server- */
 
@@ -84,16 +87,32 @@ io.on("connection", (socket) => {
     try {
       const { senderId, receiverId, text, tempId } = payload;
 
-      if (!senderId || !receiverId || !text?.trim()) {
+      if (senderId !== userId || !receiverId || !text?.trim()) {
         console.log("⚠️ Invalid message:", payload);
+        socket.emit("message_error", { tempId, error: "Invalid message" });
         return;
+      }
+
+      let conversation = await Conversation.findOne({
+        participants: { $all: [senderId, receiverId], $size: 2 },
+      });
+
+      if (!conversation) {
+        conversation = await Conversation.create({
+          participants: [senderId, receiverId],
+        });
       }
 
       const savedMessage = await Message.create({
         senderId,
         receiverId,
         text,
+        conversationId: conversation._id,
       });
+
+      conversation.messages.push(savedMessage._id);
+      conversation.lastMessage = savedMessage._id;
+      await conversation.save();
 
       const messageToSend = {
         _id: savedMessage._id,

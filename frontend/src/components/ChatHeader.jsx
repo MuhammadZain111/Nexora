@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeChat } from "../store/chatSlice";
 
@@ -14,6 +12,7 @@ const AVATAR_COLORS = [
 ];
 
 function ChatHeader() {
+ 
   const dispatch = useDispatch();
 
   const selectedChatData = useSelector((state) => state.chat.selectedChatData);
@@ -31,8 +30,10 @@ function ChatHeader() {
 
   const contact = selectedChatData;
 
+  console.log(contact);
+
   return (
-    <div className="h-24 border-b border-gray-200 flex items-center justify-between px-8 bg-[#0B0F1A]  ">
+    <div className="h-24 shrink-0 border-b border-gray-200 flex items-center justify-between px-8 bg-[#0B0F1A] text-white">
       <div className="flex items-center gap-4">
         {/* Avatar */}
         <div
@@ -45,9 +46,13 @@ function ChatHeader() {
 
         {/* User Information */}
         <div className="flex flex-col min-w-0">
-          <h2 className="text-2xl font-bold truncate">
+          <h2 className="text-2xl font-bold truncate text-white">
             {contact?.name || "Select a chat"}
           </h2>
+
+          {contact?.email && (
+            <p className="text-sm text-gray-400 truncate">{contact.email}</p>
+          )}
 
           {/* <p className="text-sm text-gray-500">
             {contact?.isOnline ? "Online" : "Offline"}

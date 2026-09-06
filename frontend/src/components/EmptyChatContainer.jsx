@@ -3,7 +3,7 @@ import React from "react";
 function EmptyChatContainer() {
   
   return (
-    <div className="flex h-screen bg-[#0B0F1A] ">
+    <div className="flex min-h-full bg-[#0B0F1A]">
       {/* Chat Container */}
       <div className="flex-1">
         <div className="h-full flex items-center justify-center">

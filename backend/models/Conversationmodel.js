@@ -12,13 +12,13 @@ const conversationSchema = new mongoose.Schema(
     messages: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Message",
+        ref: "Messagemodel",
         default: [],
       },
     ],
     lastMessage: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
+      ref: "Messagemodel",
     },
   },
   { timestamps: true }

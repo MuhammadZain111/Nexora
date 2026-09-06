@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
-import { useState, useRef } from "react";
-import { ScrollArea } from "./ui/scroll-area";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import axiosInstance from "../lib/axios";
 import { setSelectedChat } from "../store/chatSlice";
+import ProfileInfo from "./ProfileInfo";
+import { ScrollArea } from "./ui/scroll-area";
 
 
 import {
@@ -38,6 +39,20 @@ function SidebarChats() {
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState("");
   const [query, setQuery] = useState("");
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    const loadContacts = async () => {
+      try {
+        const response = await axiosInstance.get("/api/users/contacts");
+        setContacts(response.data.users || []);
+      } catch (error) {
+        console.error("Unable to load contacts:", error);
+      }
+    };
+
+    loadContacts();
+  }, []);
 
   const resetModal = () => {
     setSearchedContacts([]);
@@ -46,12 +61,11 @@ function SidebarChats() {
   };
 
   const searchContact = async () => {
-    const SearchTerm = query;
-    console.log("The call too Function for Searching the name starts ");
+    const searchTerm = query.trim();
 
-    if (!SearchTerm || SearchTerm.trim().length === 0) {
+    if (searchTerm.length < 2) {
       setSearchedContacts([]);
-      setSearchError("");
+      setSearchError(searchTerm ? "Enter at least 2 characters" : "");
       return;
     }
 
@@ -59,31 +73,20 @@ function SidebarChats() {
     setSearchError("");
 
     try {
-      const response = await fetch(`/api/users/search-contact?query=${encodeURIComponent(SearchTerm)}`,
-       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ SearchTerm }),
-        credentials: "include",
-      });
+      const response = await axiosInstance.post(
+        "/api/users/search-contact",
+        null,
+        { params: { query: searchTerm } },
+      );
 
-      const data = await response.json();
-
-      console.log("here is the searched contacts", data);
-
-      if (!response.ok) {
-        setSearchError(data.message || "Something went wrong. Try again.");
-        setSearchedContacts([]);
-        return;
-      }
-
-      setSearchedContacts(data.contacts || []);
+      setSearchedContacts(response.data.data || []);
       setSearchError("");
     } catch (error) {
-      console.error("Search failed:", error);
-      setSearchError("Network error. Please try again.");
+      console.error("Contact search failed:", error);
+      setSearchError(
+        error.response?.data?.message ||
+          "Unable to search contacts. Check that the server is running.",
+      );
       setSearchedContacts([]);
     } finally {
       setSearchLoading(false);
@@ -104,14 +107,14 @@ function SidebarChats() {
 
   return (
     
-      <aside className="w-[320px] border-r border-gray-200 flex flex-col justify-between bg-[#0B0F1A] min-h-screen ">
+      <aside className="w-[320px] shrink-0 min-h-0 overflow-y-auto border-r border-gray-200 flex flex-col justify-between bg-[#0B0F1A] ">
         <div>
           {/* Logo */}
           <div className="p-6 border-b border-gray-200 flex items-center gap-3">
             <div className="w-10 h-6 rounded-xl bg-black text-white flex items-center justify-center font-bold text-xl">
               C
             </div>
-            <h1 className="text-xl font-bold">ChatSync</h1>
+            <h3 className="text-xl font-bold   text-white  ">ChatSync</h3>
           </div>
 
           {/* Direct Messages */}
@@ -121,7 +124,7 @@ function SidebarChats() {
                 Direct Messages
               </h2>
               <button
-                className="text-2xl font-bold cursor-pointer "
+                className="text-2xl font-bold cursor-pointer text-white "
                 onClick={() => setOpenNewContactModal(true)}
               >
                 +
@@ -168,7 +171,6 @@ function SidebarChats() {
                       ref={searchInputRef}
                       type="text"
                       value={query}
-                      placeholder="Search contacts..."
                       className="bg-transparent outline-none text-sm text-black w-full placeholder-gray-400"
                       onChange={(e) => setQuery(e.target.value)}
                       onKeyDown={(e) => {
@@ -281,30 +283,20 @@ function SidebarChats() {
                   <div className="flex flex-col gap-0.5">
                     {searchedContacts.map((contact) => (
                       <button
+                        key={contact._id || contact.id}
                         type="button"
                         onClick={() => handleSelectContact(contact)}
                         className="w-full text-left"
                       >
-                        <div
-                          key={contact._id || contact.id}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 cursor-pointer transition-all group"
-                          role="button"
-                          tabIndex={0}
-                        >
-                          {/* Avatar */}
+                        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 cursor-pointer transition-all group">
                           <div className="relative shrink-0">
                             <div
-                              className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm ${getColor(
-                                contact.name,
-                              )}`}
+                              className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm ${getColor(contact.name)}`}
                             >
                               {contact.name?.charAt(0).toUpperCase() ?? "?"}
                             </div>
-                            {/* You can wire `contact.isOnline` here */}
                             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-white rounded-full" />
                           </div>
-
-                          {/* Info */}
                           <div className="flex flex-col min-w-0 flex-1">
                             <span className="text-sm font-semibold text-gray-900 truncate">
                               {contact.name}
@@ -347,25 +339,25 @@ function SidebarChats() {
             </Dialog>
 
             <div className="space-y-3">
-              <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-100 cursor-pointer transition-all">
-                <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-semibold">
-                  Z
-                </div>
-                <div>
-                  <p className="font-semibold">Zain Ahmed</p>
-                  <p className="text-sm text-gray-500">Online</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-3 rounded-2xl bg-black text-white cursor-pointer transition-all">
-                <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-semibold">
-                  A
-                </div>
-                <div>
-                  <p className="font-semibold">Ali Khan</p>
-                  <p className="text-sm text-gray-300">Typing...</p>
-                </div>
-              </div>
+              {contacts.map((contact) => (
+                <button
+                  key={contact._id || contact.id}
+                  type="button"
+                  onClick={() => handleSelectContact(contact)}
+                  className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-100 cursor-pointer transition-all text-left"
+                >
+                  <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-semibold">
+                    {contact.name?.charAt(0).toUpperCase() || "?"}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate">{contact.name}</p>
+                    <p className="text-sm text-gray-500 truncate">{contact.email}</p>
+                  </div>
+                </button>
+              ))}
+              {contacts.length === 0 && (
+                <p className="text-sm text-gray-500">No contacts found</p>
+              )}
             </div>
           </div>
 
@@ -387,18 +379,13 @@ function SidebarChats() {
               <div className="p-4 rounded-2xl hover:bg-gray-100 flex items-center gap-3 cursor-pointer transition-all">
                 <span className="text-xl">#</span>
                 <p className="font-medium">Development</p>
-              </div>
-
+              </div>     
             </div>
-
-      
-      
-        <ProfileInfo />
 
           </div>
         </div>
    {/* Profile */}
-        
+          <ProfileInfo />
     
       </aside>
    

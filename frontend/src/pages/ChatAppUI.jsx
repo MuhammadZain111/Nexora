@@ -3,24 +3,46 @@ import SidebarChats from "../components/SidebarChats";
 import ChatHeader from "../components/ChatHeader";
 import MessageComponent from "../components/MessageComponent";
 import MessageInput from "../components/MessageInput";
-import { setSelectedChat } from "../store/chatSlice";
 import EmptyChatContainer from "../components/EmptyChatContainer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
-import { Link } from "react-router-dom";
-import socket from "../socket/socket";
+import { socket } from "../lib/socket";
+import axiosInstance from "../lib/axios";
+import { addMessage, setConnected, setMessages, updateMessageStatus } from "../store/chatSlice";
+import { useAuth } from "../context/AuthContext";
 
 
 export default function ChatAppUI() {
   
   const selectedChat = useSelector((state) => state.chat.selectedChatData);
+  const dispatch = useDispatch();
+  const { user } = useAuth();
+  const currentUserId = user?._id || user?.id;
+  const selectedChatId = selectedChat?._id || selectedChat?.id;
 
 
  useEffect(() => {
+    if (!currentUserId) return undefined;
+
+    socket.io.opts.query = { userId: currentUserId };
     socket.connect();
 
    socket.on("connect", () => {
+    dispatch(setConnected(true));
     console.log("Socket connected:", socket.id);
+  });
+
+  socket.on("message_ack", ({ tempId, savedMessage }) => {
+    dispatch(updateMessageStatus({
+      conversationId: savedMessage.receiverId,
+      tempId,
+      status: "sent",
+      realId: savedMessage._id,
+    }));
+  });
+
+  socket.on("receive_message", (message) => {
+    dispatch(addMessage({ ...message, conversationId: message.senderId }));
   });
 
   socket.on("connect_error", (err) => {
@@ -52,6 +74,7 @@ export default function ChatAppUI() {
   });
 
   return () => {
+    dispatch(setConnected(false));
     socket.off("connect");
     socket.off("connect_error");
     socket.off("disconnect");
@@ -60,25 +83,53 @@ export default function ChatAppUI() {
     socket.off("error");
     socket.disconnect();
   };
-}, []);
+}, [currentUserId, dispatch]);
+
+  useEffect(() => {
+    if (!selectedChatId) return undefined;
+
+    const loadMessages = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/messages/${selectedChatId}`);
+        dispatch(setMessages({
+          conversationId: selectedChatId,
+          messages: (response.data.messages || []).map((message) => ({
+            ...message,
+            conversationId: selectedChatId,
+          })),
+        }));
+      } catch (error) {
+        console.error("Unable to load conversation:", error);
+        dispatch(setMessages({ conversationId: selectedChatId, messages: [] }));
+      }
+    };
+
+    loadMessages();
+  }, [dispatch, selectedChatId]);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] flex text-black">
+    <div className="h-dvh min-h-0 overflow-hidden bg-[#F5F5F5] flex text-black">
       {/* Sidebar */}
 
       <SidebarChats />
 
       {/* Chat Section */}
-      <main className="flex-1 flex flex-col bg-[#FAFAFA]">
+      <main className="min-w-0 min-h-0 flex-1 flex flex-col bg-[#FAFAFA]">
         {/* Header */}
 
-        <ChatHeader />
+        <div className="shrink-0">
+          <ChatHeader />
+        </div>
 
         {/* Messages */}
-        {selectedChat === null ? <EmptyChatContainer /> : <MessageComponent />}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          {selectedChat === null ? <EmptyChatContainer /> : <MessageComponent />}
+        </div>
         {/* Input Area */}
 
-        <MessageInput />
+        <div className="shrink-0 bg-[#0B0F1A]  ">
+          <MessageInput currentUserId={currentUserId} receiverId={selectedChatId} />
+        </div>
       </main>
     </div>
   );
