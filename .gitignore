@@ -26,6 +26,11 @@ frontend/node_modules/
 # Claude files
 **/.claude/
 
+# Devin
+**/.devin/skills/
+
+**/.cursor/skills/
+
 # Claude skills specifically
 **/.claude/skills/
 
