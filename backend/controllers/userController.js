@@ -24,10 +24,7 @@ export const searchUsers = async (req, res, next) => {
       });
     }
 
-    const users = await searchUsersService(
-      query.trim(),
-      req.user.id
-    );
+    const users = await searchUsersService(query.trim(), req.user._id);
 
     res.status(200).json({
       success: true,

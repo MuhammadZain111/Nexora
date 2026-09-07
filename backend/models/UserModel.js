@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -54,7 +54,7 @@ export const searchUsersByNameOrEmail = async (
       },
     ],
   })
-    .select("name email profile_image is_online")
+    .select("name email profilePic")
     .sort({ name: 1 })
     .limit(20);
 

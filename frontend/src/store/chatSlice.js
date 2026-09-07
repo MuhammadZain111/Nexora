@@ -19,11 +19,7 @@ const chatSlice = createSlice({
       state.isConnected = action.payload;
     },
 
-    selectedChatData(state, action) {
-      state.selectedChatData = action.payload;
-    },
-
-    setSelectedChat(state, action) {
+    SelectedChat(state, action) {
       state.selectedChatData = action.payload;
     },
 
@@ -106,7 +102,7 @@ export const {
   addMessage,
   updateMessageStatus,
   clearChat,
-  setSelectedChat,
+  SelectedChat,
   closeChat,
   setChats,
 } = chatSlice.actions;

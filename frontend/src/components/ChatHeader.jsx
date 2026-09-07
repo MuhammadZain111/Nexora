@@ -11,8 +11,31 @@ const AVATAR_COLORS = [
   "bg-pink-500 text-white",
 ];
 
+function getContactName(contact) {
+  return (
+    contact?.name ||
+    contact?.fullName ||
+    contact?.username ||
+    contact?.user?.name ||
+    contact?.sender?.name ||
+    contact?.senderId?.name ||
+    ""
+  ).trim();
+}
+
+function getContactImage(contact) {
+  return (
+    contact?.image ||
+    contact?.profilePic ||
+    contact?.profile_image ||
+    contact?.avatar ||
+    contact?.user?.image ||
+    contact?.user?.profilePic ||
+    ""
+  );
+}
+
 function ChatHeader() {
- 
   const dispatch = useDispatch();
 
   const selectedChatData = useSelector((state) => state.chat.selectedChatData);
@@ -29,27 +52,37 @@ function ChatHeader() {
   };
 
   const contact = selectedChatData;
-  const contactName = contact?.name?.trim() || "Select a chat";
-  const contactInitial = contactName === "Select a chat"
-    ? "?"
-    : contactName.charAt(0).toUpperCase();
+  const contactName = getContactName(contact);
+  const contactImage = getContactImage(contact);
+  const displayName = contactName || "Select a chat";
+  const contactInitial = contactName.charAt(0).toUpperCase() || "?";
 
   return (
     <div className="h-24 shrink-0 border-b border-gray-200 flex items-center justify-between px-8 bg-[#0B0F1A] text-white">
       <div className="flex items-center gap-4">
         {/* Avatar */}
         <div
-          className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold ${getColor(
+          className={`relative w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-lg font-semibold ${getColor(
             contactName,
           )}`}
         >
-          {contactInitial}
+          <span>{contactInitial}</span>
+          {contactImage && (
+            <img
+              src={contactImage}
+              alt=""
+              className="absolute inset-0 w-full h-full rounded-full object-cover"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          )}
         </div>
 
         {/* User Information */}
         <div className="flex flex-col min-w-0">
           <h2 className="text-2xl font-bold truncate text-white">
-            {contactName}
+            {displayName}
           </h2>
 
           {contact?.email && (
