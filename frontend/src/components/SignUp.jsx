@@ -15,7 +15,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [form, setForm] = useState({ fullName: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({ email: "", form: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +36,7 @@ export default function SignUp() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const newErrors = { email: "", form: "" };
 
-    if (!form.fullName.trim()) {
+    if (!form.name.trim()) {
       newErrors.form = "Please enter your name.";
     } else if (!emailRegex.test(form.email)) {
       newErrors.email = "Please enter a valid email.";
@@ -147,10 +147,10 @@ export default function SignUp() {
             <div className="relative">
               <input
                 type="text"
-                name="fullName"
+                name="name"
                 placeholder="Jane Doe"
-                value={form.fullName}
-                onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 autoComplete="name"
                 className="w-full rounded-xl py-3.5 pl-4 pr-12 outline-none transition-colors"
                 style={{ background: "#0B0F1A", border: "1px solid #22293B", color: "#ECEEF3" }}

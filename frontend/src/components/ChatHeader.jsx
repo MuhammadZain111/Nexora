@@ -29,8 +29,10 @@ function ChatHeader() {
   };
 
   const contact = selectedChatData;
-
-  console.log(contact);
+  const contactName = contact?.name?.trim() || "Select a chat";
+  const contactInitial = contactName === "Select a chat"
+    ? "?"
+    : contactName.charAt(0).toUpperCase();
 
   return (
     <div className="h-24 shrink-0 border-b border-gray-200 flex items-center justify-between px-8 bg-[#0B0F1A] text-white">
@@ -38,16 +40,16 @@ function ChatHeader() {
         {/* Avatar */}
         <div
           className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold ${getColor(
-            contact?.name,
+            contactName,
           )}`}
         >
-          {contact?.name?.charAt(0).toUpperCase() || "?"}
+          {contactInitial}
         </div>
 
         {/* User Information */}
         <div className="flex flex-col min-w-0">
           <h2 className="text-2xl font-bold truncate text-white">
-            {contact?.name || "Select a chat"}
+            {contactName}
           </h2>
 
           {contact?.email && (
