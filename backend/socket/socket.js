@@ -1,12 +1,24 @@
 const { Server } = require("socket.io");
 
-const io = new Server(3001, {
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+// const io = new Server(3001, {
+//   cors: {
+//     origin: CLIENT_URL,
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   },
+// });
+
+const io = new Server(server, {
+   cors: {
+     origin: process.env.CLIENT_URL,
+     methods: ["GET", "POST"],
+     credentials: true,
+   },
+ }); 
+
+
+
+
 
 // Declared ONCE, outside the connection handler, so it persists across connections
 const userSocketMap = new Map();
