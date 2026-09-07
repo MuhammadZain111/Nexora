@@ -3,8 +3,6 @@ import prisma from "../lib/prisma.js";
 import { searchUsersByNameOrEmail } from "../models/UserModel.js";
 
 
-
-
 const SALT_ROUNDS = 10;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

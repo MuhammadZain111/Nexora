@@ -55,6 +55,8 @@ export default function SignUp() {
    try {
   setLoading(true);
    console.log("Base URL:", axiosInstance.defaults.baseURL);
+   console.log("Signup endpoint:", axiosInstance.defaults.baseURL,"/api/auth/signup");
+
     console.log("Signup endpoint:", "/api/auth/signup");
 
   const res = await axiosInstance.post("/api/auth/signup", form);
