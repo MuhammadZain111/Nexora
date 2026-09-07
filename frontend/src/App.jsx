@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from '../routes/ProtectedRoute';
 import './App.css';
-import { AuthProvider } from "./context/AuthContext.jsx";
+import { AuthProvider } from "./context/authContext.jsx";
 import ChatAppUI from './pages/ChatAppUI';
 import LoginPage from "./pages/LoginPage";
 import NexoraLandingPage from './pages/NexoraLandingPage';

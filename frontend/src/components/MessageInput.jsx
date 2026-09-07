@@ -1,9 +1,10 @@
 "use client";
 import { socket } from "@/lib/socket";
 import { addMessage } from "@/store/chatSlice";
-import EmojiPicker from "emoji-picker-react";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+
+const EmojiPicker = lazy(() => import("emoji-picker-react"));
 
 function MessageInput({ currentUserId, receiverId }) {
   const dispatch = useDispatch();
@@ -94,11 +95,13 @@ function MessageInput({ currentUserId, receiverId }) {
 
               {emojiPickerOpen && (
                 <div className="absolute bottom-12 right-0 z-50">
-                  <EmojiPicker
-                    theme="light"
-                    onEmojiClick={handleAddEmoji}
-                    autoFocusSearch={false}
-                  />
+                  <Suspense fallback={<div className="w-[350px] h-[450px] bg-white rounded-lg" />}>
+                    <EmojiPicker
+                      theme="light"
+                      onEmojiClick={handleAddEmoji}
+                      autoFocusSearch={false}
+                    />
+                  </Suspense>
                 </div>
               )}
             </div>

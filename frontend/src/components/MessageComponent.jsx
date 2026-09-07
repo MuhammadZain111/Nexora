@@ -1,6 +1,6 @@
 "use client";
 import { useSelector } from "react-redux";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 
 function MessageComponent() {
 

@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axios";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 
 // inside component
 

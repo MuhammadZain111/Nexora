@@ -6,7 +6,7 @@ import EmptyChatContainer from "../components/EmptyChatContainer";
 import MessageComponent from "../components/MessageComponent";
 import MessageInput from "../components/MessageInput";
 import SidebarChats from "../components/SidebarChats";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 import axiosInstance from "../lib/axios";
 import { socket } from "../lib/socket";
 import {
