@@ -1,5 +1,5 @@
-import Message from "../models/Messagemodel.js";
-import Conversation from "../models/conversationmodel.js";
+import Conversation from "../models/ConversationModel.js";
+import Message from "../models/MessageModel.js";
 
 // GET /api/messages/:conversationId
 

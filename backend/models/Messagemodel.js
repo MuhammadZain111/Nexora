@@ -41,7 +41,7 @@ const messageSchema = new mongoose.Schema(
   },
 );
 
-const Messsagemodal =
+const MesssageModal =
   mongoose.models.Messagemodel || mongoose.model("Messagemodel", messageSchema);
 
-export default Messsagemodal;
+export default MesssageModal;

@@ -32,7 +32,7 @@ const contactSchema = new mongoose.Schema(
   },
 );
 
-const Contact =
+const ContactModal =
   mongoose.models.Contact || mongoose.model("Contact", contactSchema);
 
-export default Contact;
+export default ContactModal;
