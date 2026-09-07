@@ -12,8 +12,9 @@ function MessageInput({ currentUserId, receiverId }) {
   const [message, setMessage] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
-  const handleAddEmoji = (emoji) => {
-    setMessage((prev) => prev + emoji.emoji);
+  const handleAddEmoji = (emojiData) => {
+    setMessage((previousMessage) => `${previousMessage}${emojiData.emoji}`);
+    setEmojiPickerOpen(false);
   };
 
   useEffect(() => {
@@ -81,25 +82,26 @@ function MessageInput({ currentUserId, receiverId }) {
 
           <div className="flex items-center gap-2 sm:gap-4 text-xl sm:text-2xl text-gray-600">
             <button type="button">📎</button>
-            <button
-              type="button"
-              className="cursor-pointer"
-              onClick={() => setEmojiPickerOpen((prev) => !prev)}
-            >
-              😊
-            </button>
-          </div>
+            <div ref={emojiRef} className="relative">
+              <button
+                type="button"
+                className="cursor-pointer"
+                aria-label="Add emoji"
+                onClick={() => setEmojiPickerOpen((previous) => !previous)}
+              >
+                😊
+              </button>
 
-          <div
-            className="absolute bottom-16 right-0 cursor-pointer"
-            ref={emojiRef}
-          >
-            <EmojiPicker
-              theme="light"
-              onEmojiClick={handleAddEmoji}
-              open={emojiPickerOpen}
-              autoFocusSearch={false}
-            />
+              {emojiPickerOpen && (
+                <div className="absolute bottom-12 right-0 z-50">
+                  <EmojiPicker
+                    theme="light"
+                    onEmojiClick={handleAddEmoji}
+                    autoFocusSearch={false}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

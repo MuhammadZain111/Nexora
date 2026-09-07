@@ -1,4 +1,5 @@
 "use client";
+import { Circle, CircleOff } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeChat } from "../store/chatSlice";
 
@@ -39,6 +40,7 @@ function ChatHeader() {
   const dispatch = useDispatch();
 
   const selectedChatData = useSelector((state) => state.chat.selectedChatData);
+  const onlineUsers = useSelector((state) => state.chat.onlineUsers);
 
   const getColor = (name = "") => {
     if (!name) return AVATAR_COLORS[0];
@@ -56,6 +58,15 @@ function ChatHeader() {
   const contactImage = getContactImage(contact);
   const displayName = contactName || "Select a chat";
   const contactInitial = contactName.charAt(0).toUpperCase() || "?";
+  const contactId = String(
+    contact?._id ||
+      contact?.id ||
+      contact?.userId ||
+      contact?.user?._id ||
+      contact?.user?.id ||
+      "",
+  );
+  const isOnline = Boolean(contactId && onlineUsers.includes(contactId));
 
   return (
     <div className="h-24 shrink-0 border-b border-gray-200 flex items-center justify-between px-8 bg-[#0B0F1A] text-white">
@@ -89,30 +100,35 @@ function ChatHeader() {
             <p className="text-sm text-gray-400 truncate">{contact.email}</p>
           )}
 
-          {/* <p className="text-sm text-gray-500">
-            {contact?.isOnline ? "Online" : "Offline"}
-            {onlineUsers.includes(activeConversationId)
-              ? "🟢 Online"
-              : "⚪ Offline"}
-          </p> */}
         </div>
 
         {/* Online Indicator */}
         {contact && (
-          <div className="relative shrink-0">
-            <span
-              className={`absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full ${
-                contact?.isOnline ? "bg-emerald-400" : "bg-gray-400"
-              }`}
+          isOnline ? (
+            <Circle
+              size={14}
+              strokeWidth={3}
+              className="shrink-0 text-emerald-400"
+              fill="currentColor"
+              aria-label="Online"
+              title="Online"
             />
-          </div>
+          ) : (
+            <CircleOff
+              size={16}
+              strokeWidth={2.5}
+              className="shrink-0 text-gray-400"
+              aria-label="Offline"
+              title="Offline"
+            />
+          )
         )}
       </div>
 
       {/* Close Chat */}
       <button
         onClick={handleCloseChat}
-        className="text-3xl font-light text-gray-500 hover:text-black transition"
+        className="text-3xl font-light  hover:text-black transition text-white hover:cursor-pointer  "
         aria-label="Close chat"
       >
         ×

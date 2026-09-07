@@ -367,12 +367,12 @@ function SidebarChats() {
                   onClick={() => handleSelectContact(contact)}
                   className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-100 hover:text-black cursor-pointer transition-all text-left"
                 >
-                  <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-semibold">
+                  <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-semibold hover:text-black   ">
                     {contact.name?.charAt(0).toUpperCase() || "?"}
                   </div>
 
                   <div className="min-w-0">
-                    <p className="font-semibold truncate text-white">{contact.name}</p>
+                    <p className="font-semibold truncate text-white hover:text-black  ">{contact.name}</p>
                     <p className="text-sm text-white truncate">{contact.email}</p>
                   </div>
                 </button>

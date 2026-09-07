@@ -16,9 +16,9 @@ function MessageComponent() {
   const currentUserId = user?._id || user?.id;
 
   return (
-    <div className="min-h-full px-4 sm:px-10 py-8 space-y-4">
+    <div className="min-h-full px-4 sm:px-10 py-8 space-y-4 bg-[#0B0F1A]   ">
       {messages.length === 0 && (
-        <p className="text-center text-gray-500">No messages yet. Say hello.</p>
+        <p className="text-center text-white">No messages yet. Say hello.</p>
       )}
 
       {messages.map((message) => {
@@ -36,7 +36,7 @@ function MessageComponent() {
               <div
                 className={
                   isMine
-                    ? "bg-black text-white rounded-2xl px-4 py-3"
+                    ? "bg-[#2EE6A8] text-black rounded-2xl px-4 py-3"
                     : "bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm"
                 }
               >

@@ -9,7 +9,13 @@ import SidebarChats from "../components/SidebarChats";
 import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../lib/axios";
 import { socket } from "../lib/socket";
-import { addMessage, setConnected, setMessages, updateMessageStatus } from "../store/chatSlice";
+import {
+  addMessage,
+  setConnected,
+  setMessages,
+  setOnlineUsers,
+  updateMessageStatus,
+} from "../store/chatSlice";
 
 
 export default function ChatAppUI() {
@@ -25,6 +31,12 @@ export default function ChatAppUI() {
     if (!currentUserId) return undefined;
 
     socket.io.opts.query = { userId: currentUserId };
+
+    const handleOnlineUsers = (users) => {
+      dispatch(setOnlineUsers((users || []).map((userId) => String(userId))));
+    };
+
+    socket.on("online_users", handleOnlineUsers);
     socket.connect();
 
    socket.on("connect", () => {
@@ -84,6 +96,8 @@ export default function ChatAppUI() {
 
   return () => {
     dispatch(setConnected(false));
+    dispatch(setOnlineUsers([]));
+    socket.off("online_users", handleOnlineUsers);
     socket.off("connect");
     socket.off("connect_error");
     socket.off("message_ack");
