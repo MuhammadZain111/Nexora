@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Settings, CircleHelp, LogOut, ChevronUp } from "lucide-react";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function ProfileInfo() {
   const { user, isCheckingAuth, logout } = useAuth();
