@@ -31,6 +31,9 @@ frontend/node_modules/
 
 **/.cursor/skills/
 
+.agents/
+.cursor/
+
 # Claude skills specifically
 **/.claude/skills/
 

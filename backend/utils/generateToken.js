@@ -5,11 +5,14 @@ const generateTokenAndSetCookie = (userId, res) => {
     expiresIn: "15d",
   });
 
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.cookie("jwt", token, {
     maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in ms
     httpOnly: true, // JS can't access this cookie — XSS protection
-    sameSite: "lax", // CSRF protection
-    secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
+    path: "/",
   });
 
   return token;

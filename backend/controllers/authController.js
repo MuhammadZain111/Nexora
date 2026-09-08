@@ -67,16 +67,15 @@ export const login = async (req, res) => {
 
 
 
-export const logOut = async () => {
-  // 1. Clear the actual credential (source of truth)
-  await fetch("/api/auth/logout", {
-    method: "POST",
-    credentials: "include",
+export const logOut = async (req, res) => {
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
   });
 
-  // 2. Clear the UI-facing state (what your components read)
-  setUser(null);
-  setIsAuthenticated(false);
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 
