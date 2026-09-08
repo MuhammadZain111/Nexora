@@ -69,9 +69,9 @@ function MessageInput({ currentUserId, receiverId }) {
   };
 
   return (
-    <div className="shrink-0 p-3 sm:p-4 border-t border-gray-200 ">
+    <div className="shrink-0 p-2 sm:p-4 border-t border-gray-200">
       <div className="flex items-center gap-2 sm:gap-4">
-        <div className="relative flex-1 flex items-center  border border-gray-200 rounded-2xl px-5 py-4">
+        <div className="relative min-w-0 flex-1 flex items-center border border-gray-200 rounded-2xl px-3 sm:px-5 py-3 sm:py-4">
           <input
             type="text"
             placeholder="Enter message"
@@ -81,7 +81,7 @@ function MessageInput({ currentUserId, receiverId }) {
             onKeyDown={handleKeyDown}
           />
 
-          <div className="flex items-center gap-2 sm:gap-4 text-xl sm:text-2xl text-gray-600">
+          <div className="flex items-center gap-1 sm:gap-4 text-lg sm:text-2xl text-gray-600">
             <button type="button">📎</button>
             <div ref={emojiRef} className="relative">
               <button
@@ -95,7 +95,7 @@ function MessageInput({ currentUserId, receiverId }) {
 
               {emojiPickerOpen && (
                 <div className="absolute bottom-12 right-0 z-50">
-                  <Suspense fallback={<div className="w-[350px] h-[450px] bg-white rounded-lg" />}>
+                  <Suspense fallback={<div className="w-[min(350px,calc(100vw-2rem))] h-[min(450px,calc(100dvh-8rem))] bg-white rounded-lg" />}>
                     <EmojiPicker
                       theme="light"
                       onEmojiClick={handleAddEmoji}
@@ -110,7 +110,7 @@ function MessageInput({ currentUserId, receiverId }) {
 
         <button
           type="button"
-          className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-black text-white text-xl sm:text-2xl shadow-lg hover:scale-105 transition-all"
+          className="w-11 h-11 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-black text-white text-xl sm:text-2xl shadow-lg hover:scale-105 transition-all"
           onClick={handleSendMessage}
         >
           ➤

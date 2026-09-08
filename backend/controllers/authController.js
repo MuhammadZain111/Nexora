@@ -22,13 +22,14 @@ export const signup = async (req, res) => {
     const newUser = new User({ name, email, password });
     await newUser.save();
 
-    generateTokenAndSetCookie(newUser._id, res);
+    const token = generateTokenAndSetCookie(newUser._id, res);
 
     res.status(201).json({
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email,
       profilePic: newUser.profilePic,
+      token,
     });
   } catch (error) {
     console.error("Signup error:", error);
@@ -50,13 +51,14 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials." });
     }
 
-    generateTokenAndSetCookie(user._id, res);
+    const token = generateTokenAndSetCookie(user._id, res);
 
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
+      token,
     });
   } catch (error) {
     console.error("Login error:", error);

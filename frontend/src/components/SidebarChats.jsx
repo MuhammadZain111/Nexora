@@ -9,10 +9,10 @@ import { ScrollArea } from "./ui/scroll-area";
 
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 
@@ -128,7 +128,7 @@ function SidebarChats() {
 
   return (
     
-      <aside className="w-[320px] shrink-0 min-h-0 overflow-y-auto border-r border-gray-200 flex flex-col justify-between bg-[#0B0F1A] ">
+      <aside className="w-full min-w-0 min-h-0 overflow-y-auto border-r border-gray-200 flex flex-col justify-between bg-[#0B0F1A]">
         <div>
           {/* Logo */}
           <div className="p-6 border-b border-gray-200 flex items-center gap-3">
@@ -155,14 +155,13 @@ function SidebarChats() {
             {/* ── Modal ── */}
             <Dialog
               open={openNewContactModal}
-              className="w-[500px] h-[600px] "
               onOpenChange={(open) => {
                 setOpenNewContactModal(open);
                 if (!open) resetModal();
               }}
             >
               <DialogContent
-                className="p-0 gap-0 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl w-[700px] h-[700px] flex flex-col max-w-none max-h-none  "
+                className="p-0 gap-0 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl w-[calc(100vw-2rem)] max-w-[700px] h-[min(700px,calc(100dvh-2rem))] max-h-[calc(100dvh-2rem)] flex flex-col"
                 onOpenAutoFocus={(e) => {
                   e.preventDefault(); // prevent Radix stealing focus
                   searchInputRef.current?.focus(); // give it to input instead
@@ -249,8 +248,7 @@ function SidebarChats() {
 
                 {/* Results — ScrollArea is a SIBLING of header, at the same level */}
                 <ScrollArea
-                  className="flex-1 px-3 pb-3"
-                  style={{ height: "320px" }}
+                  className="min-h-0 flex-1 px-3 pb-3"
                 >
                   {/* Loading */}
                   {searchLoading && (

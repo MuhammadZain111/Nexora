@@ -27,7 +27,7 @@ const allowedOrigins = (process.env.CLIENT_URL || "")
   .map((o) => o.trim().replace(/\/$/, ""));
 
 
-  
+
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -58,11 +58,16 @@ app.use("/api/messages", messageRoutes);
 const httpServer = http.createServer(app);
 
 /* -- Socket.IO ------*/
-
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL,
-    methods: ["GET", "POST"],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Not allowed by Socket.IO CORS: ${origin}`));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
     credentials: true,
   },
 });
@@ -218,9 +223,7 @@ const startServer = async () => {
 
 startServer();
 
-/* =========================
-   Graceful Shutdown
-========================= */
+/* ======== Graceful Shutdown.  ====================== */
 
 process.on("SIGTERM", () => {
   console.log("SIGTERM received");

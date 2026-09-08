@@ -137,10 +137,20 @@ export default function ChatAppUI() {
     <div className="h-dvh min-h-0 overflow-hidden bg-[#F5F5F5] flex text-black">
       {/* Sidebar */}
 
-      <SidebarChats />
+      <div
+        className={`min-w-0 min-h-0 w-full md:flex md:w-[320px] md:max-w-[34vw] md:shrink-0 ${
+          selectedChat ? "hidden" : "flex"
+        }`}
+      >
+        <SidebarChats />
+      </div>
 
       {/* Chat Section */}
-      <main className="min-w-0 min-h-0 flex-1 flex flex-col bg-[#FAFAFA]">
+      <main
+        className={`min-w-0 min-h-0 flex-1 flex-col bg-[#FAFAFA] ${
+          selectedChat ? "flex" : "hidden md:flex"
+        }`}
+      >
         {/* Header */}
 
         <div className="shrink-0">

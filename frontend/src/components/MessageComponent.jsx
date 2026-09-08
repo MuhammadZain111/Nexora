@@ -16,7 +16,7 @@ function MessageComponent() {
   const currentUserId = user?._id || user?.id;
 
   return (
-    <div className="min-h-full px-4 sm:px-10 py-8 space-y-4 bg-[#0B0F1A]   ">
+    <div className="min-h-full min-w-0 px-3 sm:px-10 py-5 sm:py-8 space-y-4 bg-[#0B0F1A]">
       {messages.length === 0 && (
         <p className="text-center text-white">No messages yet. Say hello.</p>
       )}
@@ -32,7 +32,7 @@ function MessageComponent() {
             key={message._id || message.tempId}
             className={isMine ? "flex justify-end" : "flex justify-start"}
           >
-            <div className="max-w-[75%]">
+            <div className="min-w-0 max-w-[88%] sm:max-w-[75%]">
               <div
                 className={
                   isMine
@@ -40,7 +40,7 @@ function MessageComponent() {
                     : "bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm"
                 }
               >
-                <p>{messageText}</p>
+                <p className="break-words whitespace-pre-wrap">{messageText}</p>
               </div>
               <p className="text-xs text-gray-500 mt-1 px-1">
                 {message.createdAt

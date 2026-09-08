@@ -69,11 +69,11 @@ function ChatHeader() {
   const isOnline = Boolean(contactId && onlineUsers.includes(contactId));
 
   return (
-    <div className="h-24 shrink-0 border-b border-gray-200 flex items-center justify-between px-8 bg-[#0B0F1A] text-white">
-      <div className="flex items-center gap-4">
+    <div className="min-h-20 shrink-0 border-b border-gray-200 flex items-center justify-between gap-3 px-4 sm:px-8 py-3 bg-[#0B0F1A] text-white">
+      <div className="min-w-0 flex items-center gap-3 sm:gap-4">
         {/* Avatar */}
         <div
-          className={`relative w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-lg font-semibold ${getColor(
+            className={`relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center text-lg font-semibold ${getColor(
             contactName,
           )}`}
         >
@@ -92,7 +92,7 @@ function ChatHeader() {
 
         {/* User Information */}
         <div className="flex flex-col min-w-0">
-          <h2 className="text-2xl font-bold truncate text-white">
+          <h2 className="text-lg sm:text-2xl font-bold truncate text-white">
             {displayName}
           </h2>
 

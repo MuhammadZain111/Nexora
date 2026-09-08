@@ -51,6 +51,7 @@ export default function SignIn() {
         password: form.password,
       });
 
+      localStorage.setItem("nexora_token", res.data.token);
       setUser(res.data);
       navigate("/chatui");
     } catch (err) {

@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await axiosInstance.post("/api/auth/logout");
     } finally {
+      localStorage.removeItem("nexora_token");
       setUser(null);
     }
   };

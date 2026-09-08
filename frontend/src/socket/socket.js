@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import user from "../store/chatSlice";
 
-const socket = io(import.meta.env.SOCKET_URL, {
+const socket = io(import.meta.env.VITE_API_URL, {
   autoConnect: false,
   transports: ["websocket"],
 });
