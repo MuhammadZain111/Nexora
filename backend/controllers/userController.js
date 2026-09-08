@@ -13,6 +13,7 @@ export const getUsersForSidebar = async (req, res, next) => {
   }
 };
 
+
 export const searchUsers = async (req, res, next) => {
   try {
     const { query } = req.query;
