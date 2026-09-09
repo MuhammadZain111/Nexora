@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { User, Mail, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import  axiosInstance  from "@/lib/axios";
+import { useAuth } from "../context/AuthContext";
 import ValidationItem from "./ValidationItem";
 
 
@@ -13,7 +13,7 @@ export default function SignUp() {
 
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { setUser } = useAuth();
 
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -52,19 +52,11 @@ export default function SignUp() {
     setErrors({ email: "", form: "" });
     setLoading(true);
 
-   try {
-  setLoading(true);
-   console.log("Base URL:", axiosInstance.defaults.baseURL);
-   console.log("Signup endpoint:", axiosInstance.defaults.baseURL,"/api/auth/signup");
+    try {
+      const res = await axiosInstance.post("/api/auth/signup", form);
 
-    console.log("Signup endpoint:", "/api/auth/signup");
-
-  const res = await axiosInstance.post("/api/auth/signup", form);
-
-  // Signup successful
-  dispatch(setUser(res.data));
-
-  navigate("/login");
+      setUser(res.data);
+      navigate("/login");
 
 } catch (err) {
   console.error("Signup error:", err);
