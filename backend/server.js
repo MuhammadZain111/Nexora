@@ -50,12 +50,24 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
 
-/* ==========Error Handling Middleware ============== */
+/* ======== Error Handling Middleware ============ */
 
 /*  HTTP Server- */
 
 
 const httpServer = http.createServer(app);
+
+  
+ 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Nexora Backend is running 🚀",
+  });
+});
+
+
+
 
 /* -- Socket.IO ------*/
 const io = new Server(httpServer, {
@@ -188,7 +200,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  /* ========================= Disconnect ======================= */
+  /* =============== Disconnect. ===================== */
 
   socket.on("disconnect", () => {
     console.log(`❌ User ${userId} disconnected`);
@@ -211,7 +223,7 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    httpServer.listen(PORT, () => {
+    httpServer.listen(PORT,"0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (error) {
