@@ -2,8 +2,7 @@
 import { socket } from "@/lib/socket";
 import { addMessage } from "@/store/chatSlice";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-
+import { useDispatch } from "react-redux"
 const EmojiPicker = lazy(() => import("emoji-picker-react"));
 
 function MessageInput({ currentUserId, receiverId }) {
