@@ -66,9 +66,6 @@ export const login = async (req, res) => {
   }
 };
 
-
-
-
 export const logOut = async (req, res) => {
   res.clearCookie("jwt", {
     httpOnly: true,
@@ -80,26 +77,22 @@ export const logOut = async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-
-
 export const checkAuth = (req, res) => {
   // req.user is set by the protectRoute middleware
   res.status(200).json(req.user);
 };
 
-
-
- export const  getUser = async (req, res) => {
+export const getUser = async (req, res) => {
   try {
     // req.user is set by the auth middleware after verifying the JWT
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).select("-password");
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.status(200).json({ user });
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };

@@ -11,10 +11,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-
 // Hash password before saving
 userSchema.pre("save", async function () {
-
   if (!this.isModified("password")) return;
 
   const salt = await bcrypt.genSalt(10);
@@ -29,12 +27,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 const UserModal = mongoose.model("User", userSchema);
 export default UserModal;
 
-
-
-export const searchUsersByNameOrEmail = async (
-  query,
-  currentUserId
-) => {
+export const searchUsersByNameOrEmail = async (query, currentUserId) => {
   const users = await User.find({
     _id: { $ne: currentUserId },
 

@@ -9,16 +9,12 @@ const { Server } = require("socket.io");
 // });
 
 const io = new Server(server, {
-   cors: {
-     origin: process.env.CLIENT_URL,
-     methods: ["GET", "POST"],
-     credentials: true,
-   },
- }); 
-
-
-
-
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
 // Declared ONCE, outside the connection handler, so it persists across connections
 const userSocketMap = new Map();

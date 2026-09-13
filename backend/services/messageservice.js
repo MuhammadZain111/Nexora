@@ -28,7 +28,10 @@ export async function assertParticipant(conversationId, userId) {
     where: { conversationId_userId: { conversationId, userId } },
   });
   if (!participant) {
-    throw new MessageServiceError("Not a participant of this conversation", 403);
+    throw new MessageServiceError(
+      "Not a participant of this conversation",
+      403,
+    );
   }
   return participant;
 }
@@ -88,7 +91,9 @@ export async function sendMessage(conversationId, senderId, content) {
     throw new MessageServiceError("Message content cannot be empty");
   }
   if (trimmed.length > MAX_MESSAGE_LENGTH) {
-    throw new MessageServiceError(`Message exceeds ${MAX_MESSAGE_LENGTH} characters`);
+    throw new MessageServiceError(
+      `Message exceeds ${MAX_MESSAGE_LENGTH} characters`,
+    );
   }
 
   await assertParticipant(conversationId, senderId);
@@ -166,7 +171,7 @@ export async function listConversationsForUser(userId) {
         unreadCount,
         updatedAt: p.conversation.updatedAt.toISOString(),
       };
-    })
+    }),
   );
 }
 

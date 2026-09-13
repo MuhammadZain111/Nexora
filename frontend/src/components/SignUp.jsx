@@ -1,17 +1,11 @@
 import { useState } from "react";
 import { User, Mail, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import  axiosInstance  from "@/lib/axios";
+import axiosInstance from "@/lib/axios";
 import { useAuth } from "../context/AuthContext";
 import ValidationItem from "./ValidationItem";
 
-
-
-
-
 export default function SignUp() {
-
-
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
@@ -57,64 +51,58 @@ export default function SignUp() {
 
       setUser(res.data);
       navigate("/login");
+    } catch (err) {
+      console.error("Signup error:", err);
 
-} catch (err) {
-  console.error("Signup error:", err);
+      if (err.response) {
+        const status = err.response.status;
+        const message =
+          err.response.data?.message || "Unable to create your account.";
 
-  if (err.response) {
-    const status = err.response.status;
-    const message =
-      err.response.data?.message ||
-      "Unable to create your account.";
-
-    if (status === 400) {
-      setErrors({
-        email: err.response.data?.field === "email" ? message : "",
-        form: err.response.data?.field === "email" ? "" : message,
-      });
-
-    } else if (status === 409) {
-      setErrors({
-        email: message,
-        form: "",
-      });
-
-    } else if (status >= 500) {
-      setErrors({
-        email: "",
-        form: "Server error. Please try again later.",
-      });
-
-    } else {
-      setErrors({
-        email: "",
-        form: message,
-      });
+        if (status === 400) {
+          setErrors({
+            email: err.response.data?.field === "email" ? message : "",
+            form: err.response.data?.field === "email" ? "" : message,
+          });
+        } else if (status === 409) {
+          setErrors({
+            email: message,
+            form: "",
+          });
+        } else if (status >= 500) {
+          setErrors({
+            email: "",
+            form: "Server error. Please try again later.",
+          });
+        } else {
+          setErrors({
+            email: "",
+            form: message,
+          });
+        }
+      } else if (err.request) {
+        setErrors({
+          email: "",
+          form: "Unable to connect to the server. Please check your connection.",
+        });
+      } else {
+        setErrors({
+          email: "",
+          form: "Something went wrong. Please try again.",
+        });
+      }
+    } finally {
+      setLoading(false);
     }
-
-  } else if (err.request) {
-    setErrors({
-      email: "",
-      form: "Unable to connect to the server. Please check your connection.",
-    });
-
-  } else {
-    setErrors({
-      email: "",
-      form: "Something went wrong. Please try again.",
-    });
-  }
-
-} finally {
-  setLoading(false);
-}
-
   };
 
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center px-4 py-12"
-      style={{ background: "#0B0F1A", fontFamily: "'Inter', system-ui, sans-serif" }}
+      style={{
+        background: "#0B0F1A",
+        fontFamily: "'Inter', system-ui, sans-serif",
+      }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500&display=swap');
@@ -135,7 +123,10 @@ export default function SignUp() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           {/* Full name */}
           <div>
-            <label className="block font-medium mb-2 text-sm" style={{ color: "#ECEEF3" }}>
+            <label
+              className="block font-medium mb-2 text-sm"
+              style={{ color: "#ECEEF3" }}
+            >
               Full name
             </label>
             <div className="relative">
@@ -147,18 +138,28 @@ export default function SignUp() {
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 autoComplete="name"
                 className="w-full rounded-xl py-3.5 pl-4 pr-12 outline-none transition-colors"
-                style={{ background: "#0B0F1A", border: "1px solid #22293B", color: "#ECEEF3" }}
+                style={{
+                  background: "#0B0F1A",
+                  border: "1px solid #22293B",
+                  color: "#ECEEF3",
+                }}
                 onFocus={(e) => (e.target.style.borderColor = "#2EE6A8")}
                 onBlur={(e) => (e.target.style.borderColor = "#22293B")}
                 required
               />
-              <User className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#8C97AE" }} />
+              <User
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5"
+                style={{ color: "#8C97AE" }}
+              />
             </div>
           </div>
 
           {/* Email */}
           <div>
-            <label className="block font-medium mb-2 text-sm" style={{ color: "#ECEEF3" }}>
+            <label
+              className="block font-medium mb-2 text-sm"
+              style={{ color: "#ECEEF3" }}
+            >
               Email
             </label>
             <div className="relative">
@@ -170,21 +171,33 @@ export default function SignUp() {
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 autoComplete="email"
                 className="w-full rounded-xl py-3.5 pl-4 pr-12 outline-none transition-colors"
-                style={{ background: "#0B0F1A", border: "1px solid #22293B", color: "#ECEEF3" }}
+                style={{
+                  background: "#0B0F1A",
+                  border: "1px solid #22293B",
+                  color: "#ECEEF3",
+                }}
                 onFocus={(e) => (e.target.style.borderColor = "#2EE6A8")}
                 onBlur={(e) => (e.target.style.borderColor = "#22293B")}
                 required
               />
-              <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#8C97AE" }} />
+              <Mail
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5"
+                style={{ color: "#8C97AE" }}
+              />
             </div>
             {errors.email && (
-              <p className="text-sm mt-2" style={{ color: "#FF7A59" }}>{errors.email}</p>
+              <p className="text-sm mt-2" style={{ color: "#FF7A59" }}>
+                {errors.email}
+              </p>
             )}
           </div>
 
           {/* Password */}
           <div>
-            <label className="block font-medium mb-2 text-sm" style={{ color: "#ECEEF3" }}>
+            <label
+              className="block font-medium mb-2 text-sm"
+              style={{ color: "#ECEEF3" }}
+            >
               Password
             </label>
             <div className="relative">
@@ -196,7 +209,11 @@ export default function SignUp() {
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 autoComplete="new-password"
                 className="w-full rounded-xl py-3.5 pl-4 pr-12 outline-none transition-colors"
-                style={{ background: "#0B0F1A", border: "1px solid #22293B", color: "#ECEEF3" }}
+                style={{
+                  background: "#0B0F1A",
+                  border: "1px solid #22293B",
+                  color: "#ECEEF3",
+                }}
                 onFocus={(e) => (e.target.style.borderColor = "#2EE6A8")}
                 onBlur={(e) => (e.target.style.borderColor = "#22293B")}
                 required
@@ -208,26 +225,50 @@ export default function SignUp() {
                 style={{ color: "#8C97AE" }}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
 
           {/* Password checklist */}
-          <div className="rounded-xl p-4" style={{ background: "#0B0F1A", border: "1px solid #22293B" }}>
-            <p className="text-sm font-medium mb-3" style={{ color: "#ECEEF3" }}>
+          <div
+            className="rounded-xl p-4"
+            style={{ background: "#0B0F1A", border: "1px solid #22293B" }}
+          >
+            <p
+              className="text-sm font-medium mb-3"
+              style={{ color: "#ECEEF3" }}
+            >
               Password must contain
             </p>
             <div className="flex flex-col gap-1.5">
-              <ValidationItem valid={validations.length} text="At least 8 characters" />
-              <ValidationItem valid={validations.uppercase} text="One uppercase letter" />
-              <ValidationItem valid={validations.lowercase} text="One lowercase letter" />
-              <ValidationItem valid={validations.numberOrSpecial} text="One number or special character" />
+              <ValidationItem
+                valid={validations.length}
+                text="At least 8 characters"
+              />
+              <ValidationItem
+                valid={validations.uppercase}
+                text="One uppercase letter"
+              />
+              <ValidationItem
+                valid={validations.lowercase}
+                text="One lowercase letter"
+              />
+              <ValidationItem
+                valid={validations.numberOrSpecial}
+                text="One number or special character"
+              />
             </div>
           </div>
 
           {errors.form && (
-            <p className="text-sm font-medium" style={{ color: "#FF7A59" }}>{errors.form}</p>
+            <p className="text-sm font-medium" style={{ color: "#FF7A59" }}>
+              {errors.form}
+            </p>
           )}
 
           {/* Submit */}
@@ -243,7 +284,11 @@ export default function SignUp() {
           {/* Footer */}
           <p className="text-center text-sm" style={{ color: "#8C97AE" }}>
             Already have an account?{" "}
-            <Link to="/login" className="font-semibold" style={{ color: "#2EE6A8" }}>
+            <Link
+              to="/login"
+              className="font-semibold"
+              style={{ color: "#2EE6A8" }}
+            >
               Log in
             </Link>
           </p>

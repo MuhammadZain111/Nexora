@@ -2,17 +2,13 @@ import React, { useEffect, useState } from "react";
 import { MessageCircle, Users, Lock, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
-
 const CONVERSATION = [
   { from: "them", text: "hey, are we still on for the sync?", delay: 600 },
   { from: "me", text: "yep, omw", delay: 1400 },
   { from: "them", text: "grabbing coffee, want anything?", delay: 2300 },
 ];
 
-export default function NexoraLandingPage() 
-{
-
+export default function NexoraLandingPage() {
   const navigate = useNavigate();
 
   const [visibleCount, setVisibleCount] = useState(0);
@@ -22,14 +18,12 @@ export default function NexoraLandingPage()
     const timers = [];
     CONVERSATION.forEach((msg, i) => {
       // show a typing indicator just before each message lands
-      timers.push(
-        setTimeout(() => setTyping(true), msg.delay - 500)
-      );
+      timers.push(setTimeout(() => setTyping(true), msg.delay - 500));
       timers.push(
         setTimeout(() => {
           setTyping(false);
           setVisibleCount((c) => Math.max(c, i + 1));
-        }, msg.delay)
+        }, msg.delay),
       );
     });
     return () => timers.forEach(clearTimeout);
@@ -88,9 +82,19 @@ export default function NexoraLandingPage()
           <span className="font-display text-lg tracking-tight">Nexora</span>
         </div>
 
-        <div className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-wider" style={{ color: "#8C97AE" }}>
-          <a href="#features" className="hover:text-[#ECEEF3] transition-colors">Features</a>
-          <a href="#about" className="hover:text-[#ECEEF3] transition-colors">About</a>
+        <div
+          className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-wider"
+          style={{ color: "#8C97AE" }}
+        >
+          <a
+            href="#features"
+            className="hover:text-[#ECEEF3] transition-colors"
+          >
+            Features
+          </a>
+          <a href="#about" className="hover:text-[#ECEEF3] transition-colors">
+            About
+          </a>
         </div>
 
         <button
@@ -108,7 +112,10 @@ export default function NexoraLandingPage()
             className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider px-3 py-1.5 rounded-full border mb-6"
             style={{ borderColor: "#22293B", color: "#2EE6A8" }}
           >
-            <span className="w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: "#2EE6A8" }} />
+            <span
+              className="w-1.5 h-1.5 rounded-full pulse-dot"
+              style={{ background: "#2EE6A8" }}
+            />
             Live now
           </div>
 
@@ -120,8 +127,12 @@ export default function NexoraLandingPage()
             Collaborate.
           </h1>
 
-          <p className="text-base md:text-lg mb-9 max-w-md" style={{ color: "#8C97AE" }}>
-            A simple and secure way to stay connected with the people that matter — messages arrive the instant you send them.
+          <p
+            className="text-base md:text-lg mb-9 max-w-md"
+            style={{ color: "#8C97AE" }}
+          >
+            A simple and secure way to stay connected with the people that
+            matter — messages arrive the instant you send them.
           </p>
 
           <div className="flex flex-wrap items-center gap-4">
@@ -160,8 +171,14 @@ export default function NexoraLandingPage()
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium">Amara</p>
-              <p className="font-mono text-[11px] flex items-center gap-1.5" style={{ color: "#2EE6A8" }}>
-                <span className="w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: "#2EE6A8" }} />
+              <p
+                className="font-mono text-[11px] flex items-center gap-1.5"
+                style={{ color: "#2EE6A8" }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full pulse-dot"
+                  style={{ background: "#2EE6A8" }}
+                />
                 online
               </p>
             </div>
@@ -177,8 +194,10 @@ export default function NexoraLandingPage()
                 style={{
                   background: msg.from === "me" ? "#FF7A59" : "#1B2333",
                   color: msg.from === "me" ? "#1A0D07" : "#ECEEF3",
-                  borderBottomRightRadius: msg.from === "me" ? "4px" : undefined,
-                  borderBottomLeftRadius: msg.from === "them" ? "4px" : undefined,
+                  borderBottomRightRadius:
+                    msg.from === "me" ? "4px" : undefined,
+                  borderBottomLeftRadius:
+                    msg.from === "them" ? "4px" : undefined,
                 }}
               >
                 {msg.text}
@@ -190,9 +209,18 @@ export default function NexoraLandingPage()
                 className="self-start px-4 py-3 rounded-2xl flex items-center gap-1"
                 style={{ background: "#1B2333", borderBottomLeftRadius: "4px" }}
               >
-                <span className="type-dot w-1.5 h-1.5 rounded-full" style={{ background: "#8C97AE" }} />
-                <span className="type-dot w-1.5 h-1.5 rounded-full" style={{ background: "#8C97AE" }} />
-                <span className="type-dot w-1.5 h-1.5 rounded-full" style={{ background: "#8C97AE" }} />
+                <span
+                  className="type-dot w-1.5 h-1.5 rounded-full"
+                  style={{ background: "#8C97AE" }}
+                />
+                <span
+                  className="type-dot w-1.5 h-1.5 rounded-full"
+                  style={{ background: "#8C97AE" }}
+                />
+                <span
+                  className="type-dot w-1.5 h-1.5 rounded-full"
+                  style={{ background: "#8C97AE" }}
+                />
               </div>
             )}
           </div>
@@ -243,7 +271,10 @@ export default function NexoraLandingPage()
       >
         <span>© {new Date().getFullYear()} Nexora</span>
         <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: "#2EE6A8" }} />
+          <span
+            className="w-1.5 h-1.5 rounded-full pulse-dot"
+            style={{ background: "#2EE6A8" }}
+          />
           all systems online
         </span>
       </footer>
@@ -263,7 +294,10 @@ function FeatureCard({ icon, tag, title, description, accent }) {
       >
         {icon}
       </div>
-      <p className="font-mono text-[11px] tracking-wider mb-2" style={{ color: accent }}>
+      <p
+        className="font-mono text-[11px] tracking-wider mb-2"
+        style={{ color: accent }}
+      >
         {tag}
       </p>
       <h3 className="font-display text-lg font-semibold mb-2">{title}</h3>

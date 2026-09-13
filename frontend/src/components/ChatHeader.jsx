@@ -73,7 +73,7 @@ function ChatHeader() {
       <div className="min-w-0 flex items-center gap-3 sm:gap-4">
         {/* Avatar */}
         <div
-            className={`relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center text-lg font-semibold ${getColor(
+          className={`relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center text-lg font-semibold ${getColor(
             contactName,
           )}`}
         >
@@ -99,12 +99,11 @@ function ChatHeader() {
           {contact?.email && (
             <p className="text-sm text-gray-400 truncate">{contact.email}</p>
           )}
-
         </div>
 
         {/* Online Indicator */}
-        {contact && (
-          isOnline ? (
+        {contact &&
+          (isOnline ? (
             <Circle
               size={14}
               strokeWidth={3}
@@ -121,8 +120,7 @@ function ChatHeader() {
               aria-label="Offline"
               title="Offline"
             />
-          )
-        )}
+          ))}
       </div>
 
       {/* Close Chat */}

@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import prisma from "../lib/prisma.js";
 import { searchUsersByNameOrEmail } from "../models/UserModel.js";
 
-
 const SALT_ROUNDS = 10;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -40,15 +39,25 @@ export async function createUser({ name, email, password, image }) {
     throw new UserServiceError("Password must be at least 8 characters");
   }
 
-  const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+  const existing = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
   if (existing) {
-    throw new UserServiceError("An account with that email already exists", 409);
+    throw new UserServiceError(
+      "An account with that email already exists",
+      409,
+    );
   }
 
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
   const user = await prisma.user.create({
-    data: { name: trimmedName, email: normalizedEmail, passwordHash, image: image ?? null },
+    data: {
+      name: trimmedName,
+      email: normalizedEmail,
+      passwordHash,
+      image: image ?? null,
+    },
   });
 
   return toUserDTO(user);
@@ -58,7 +67,9 @@ export async function createUser({ name, email, password, image }) {
 export async function authenticateUser(email, password) {
   const normalizedEmail = (email || "").trim().toLowerCase();
 
-  const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+  const user = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
   if (!user) {
     throw new UserServiceError("Invalid email or password", 401);
   }
@@ -83,7 +94,9 @@ export async function getUserById(userId) {
 /** Fetches a single user by email. */
 export async function getUserByEmail(email) {
   const normalizedEmail = (email || "").trim().toLowerCase();
-  const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+  const user = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
   if (!user) {
     throw new UserServiceError("User not found", 404);
   }
@@ -163,11 +176,6 @@ export async function deleteUser(userId) {
   return { success: true };
 }
 
-
-
 export const searchUsersService = async (query, currentUserId) => {
-  return await searchUsersByNameOrEmail(
-    query,
-    currentUserId
-  );
+  return await searchUsersByNameOrEmail(query, currentUserId);
 };

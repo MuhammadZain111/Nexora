@@ -4,9 +4,8 @@ import axiosInstance from "../lib/axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
- 
   const [user, setUser] = useState(null);
- 
+
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   // Check whether user is already logged in
@@ -26,9 +25,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-
-
- const logout = async () => {
+  const logout = async () => {
     try {
       await axiosInstance.post("/api/auth/logout");
     } finally {
@@ -36,9 +33,6 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     }
   };
-
-
-
 
   const value = {
     user,

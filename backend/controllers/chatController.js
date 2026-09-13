@@ -3,7 +3,6 @@ import Message from "../models/MessageModel.js";
 
 // GET /api/messages/:conversationId
 
-
 export const getMessages = async (req, res) => {
   try {
     const { conversationId } = req.params;
@@ -14,7 +13,9 @@ export const getMessages = async (req, res) => {
     }
 
     if (!conversation.participants.includes(req.user._id)) {
-      return res.status(403).json({ message: "Not authorized to view this conversation" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view this conversation" });
     }
 
     const messages = await Message.find({ conversationId })
@@ -41,11 +42,15 @@ export const sendMessage = async (req, res) => {
     }
 
     if (!conversation.participants.includes(senderId)) {
-      return res.status(403).json({ message: "Not authorized to send in this conversation" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to send in this conversation" });
     }
 
     if (!text && !image) {
-      return res.status(400).json({ message: "Message must have text or image" });
+      return res
+        .status(400)
+        .json({ message: "Message must have text or image" });
     }
 
     const newMessage = await Message.create({
@@ -58,7 +63,10 @@ export const sendMessage = async (req, res) => {
     conversation.lastMessage = newMessage._id;
     await conversation.save();
 
-    const populatedMessage = await newMessage.populate("senderId", "username avatar");
+    const populatedMessage = await newMessage.populate(
+      "senderId",
+      "username avatar",
+    );
 
     // emit via socket.io if you're broadcasting to conversation room
     // io.to(conversationId).emit("newMessage", populatedMessage);
@@ -81,7 +89,9 @@ export const deleteMessage = async (req, res) => {
     }
 
     if (message.senderId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized to delete this message" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this message" });
     }
 
     await message.deleteOne();
@@ -94,8 +104,6 @@ export const deleteMessage = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
 
 export const createConversation = async (req, res) => {
   try {
@@ -120,10 +128,7 @@ export const createConversation = async (req, res) => {
       message: "Failed to create conversation",
     });
   }
-}; 
-
-
-
+};
 
 export const deleteConversation = async (req, res) => {
   try {
@@ -141,8 +146,7 @@ export const deleteConversation = async (req, res) => {
 
     // Make sure the current user belongs to this conversation
     const isParticipant = conversation.participants.some(
-      (participantId) =>
-        participantId.toString() === currentUserId.toString()
+      (participantId) => participantId.toString() === currentUserId.toString(),
     );
 
     if (!isParticipant) {
@@ -172,8 +176,7 @@ export const deleteConversation = async (req, res) => {
       error: error.message,
     });
   }
-}
-
+};
 
 export const getConversationById = async (req, res) => {
   try {
@@ -193,8 +196,6 @@ export const getConversationById = async (req, res) => {
     });
   }
 };
-
-
 
 export const getConversations = async (req, res) => {
   try {
@@ -228,14 +229,13 @@ export const getConversations = async (req, res) => {
 
       ORDER BY c.created_at DESC
       `,
-      [userId]
+      [userId],
     );
 
     res.status(200).json({
       success: true,
       conversations: result.rows,
     });
-
   } catch (error) {
     console.error("Get conversations error:", error);
 

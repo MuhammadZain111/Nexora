@@ -26,8 +26,6 @@ const allowedOrigins = (process.env.CLIENT_URL || "")
   .split(",")
   .map((o) => o.trim().replace(/\/$/, ""));
 
-
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -54,20 +52,14 @@ app.use("/api/messages", messageRoutes);
 
 /*  HTTP Server- */
 
-
 const httpServer = http.createServer(app);
 
-  
- 
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "Nexora Backend is running 🚀",
   });
 });
-
-
-
 
 /* -- Socket.IO ------*/
 const io = new Server(httpServer, {
@@ -223,7 +215,7 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    httpServer.listen(PORT,"0.0.0.0", () => {
+    httpServer.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (error) {

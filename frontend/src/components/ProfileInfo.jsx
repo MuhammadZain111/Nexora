@@ -28,10 +28,19 @@ export default function ProfileInfo() {
     return (
       <div className="px-3 py-3 border-t" style={{ borderColor: "#22293B" }}>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full animate-pulse" style={{ background: "#22293B" }} />
+          <div
+            className="w-9 h-9 rounded-full animate-pulse"
+            style={{ background: "#22293B" }}
+          />
           <div className="flex-1 space-y-1.5">
-            <div className="h-2.5 w-20 rounded animate-pulse" style={{ background: "#22293B" }} />
-            <div className="h-2 w-28 rounded animate-pulse" style={{ background: "#22293B" }} />
+            <div
+              className="h-2.5 w-20 rounded animate-pulse"
+              style={{ background: "#22293B" }}
+            />
+            <div
+              className="h-2 w-28 rounded animate-pulse"
+              style={{ background: "#22293B" }}
+            />
           </div>
         </div>
       </div>
@@ -56,7 +65,11 @@ export default function ProfileInfo() {
   }
 
   return (
-    <div ref={menuRef} className="relative px-3 py-3 border-t" style={{ borderColor: "#22293B" }}>
+    <div
+      ref={menuRef}
+      className="relative px-3 py-3 border-t"
+      style={{ borderColor: "#22293B" }}
+    >
       {menuOpen && (
         <div
           className="absolute bottom-full left-3 right-3 mb-2 rounded-xl border overflow-hidden"
@@ -66,7 +79,9 @@ export default function ProfileInfo() {
             className="w-full flex items-center gap-3 px-3.5 py-2.5 text-sm transition-colors"
             style={{ color: "#ECEEF3" }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#1A2133")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
           >
             <Settings size={16} style={{ color: "#8C97AE" }} />
             Settings
@@ -75,7 +90,9 @@ export default function ProfileInfo() {
             className="w-full flex items-center gap-3 px-3.5 py-2.5 text-sm transition-colors"
             style={{ color: "#ECEEF3" }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#1A2133")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
           >
             <CircleHelp size={16} style={{ color: "#8C97AE" }} />
             Help
@@ -86,7 +103,9 @@ export default function ProfileInfo() {
             className="w-full flex items-center gap-3 px-3.5 py-2.5 text-sm transition-colors"
             style={{ color: "#FF7A59" }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#1A2133")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
           >
             <LogOut size={16} />
             Log out
@@ -107,7 +126,10 @@ export default function ProfileInfo() {
           style={{ borderColor: "#22293B" }}
         />
         <div className="flex-1 min-w-0 text-left">
-          <p className="text-sm font-medium truncate" style={{ color: "#ECEEF3" }}>
+          <p
+            className="text-sm font-medium truncate"
+            style={{ color: "#ECEEF3" }}
+          >
             {user.name}
           </p>
           <p className="text-xs truncate" style={{ color: "#8C97AE" }}>

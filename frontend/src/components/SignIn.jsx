@@ -6,7 +6,6 @@ import { useAuth } from "../context/AuthContext.jsx";
 
 // inside component
 
-
 /**
  * Sign in page — restyled to match Nexora's landing page tokens.
  *
@@ -20,7 +19,6 @@ import { useAuth } from "../context/AuthContext.jsx";
  */
 
 export default function SignIn() {
-  
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
@@ -64,7 +62,10 @@ export default function SignIn() {
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center px-4"
-      style={{ background: "#0B0F1A", fontFamily: "'Inter', system-ui, sans-serif" }}
+      style={{
+        background: "#0B0F1A",
+        fontFamily: "'Inter', system-ui, sans-serif",
+      }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500&display=swap');
@@ -152,7 +153,11 @@ export default function SignIn() {
                 style={{ color: "#8C97AE" }}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
 
@@ -191,7 +196,9 @@ export default function SignIn() {
         {/* Divider */}
         <div className="flex items-center gap-4 my-8">
           <div className="flex-1 h-px" style={{ background: "#22293B" }} />
-          <span className="text-sm" style={{ color: "#8C97AE" }}>or</span>
+          <span className="text-sm" style={{ color: "#8C97AE" }}>
+            or
+          </span>
           <div className="flex-1 h-px" style={{ background: "#22293B" }} />
         </div>
 

@@ -21,7 +21,7 @@ const conversationSchema = new mongoose.Schema(
       ref: "Messagemodel",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Speeds up lookups like: Conversation.findOne({ participants: { $all: [senderId, receiverId] } })

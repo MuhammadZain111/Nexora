@@ -32,11 +32,4 @@ router.post("/conversations", createConversation);
 // Delete a conversation
 router.delete("/conversations/:conversationId", deleteConversation);
 
-
-
-
-
-
-
-
 export default router;

@@ -1,7 +1,6 @@
 import React from "react";
 
 function EmptyChatContainer() {
-  
   return (
     <div className="flex min-h-full bg-[#0B0F1A]">
       {/* Chat Container */}
